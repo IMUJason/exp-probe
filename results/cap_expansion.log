@@ -1,26 +1,12 @@
-W=500 vol=0.0 full: 5500 evals, 11 iters, 10.6s, certified=True
-W=500 vol=0.0 oracle: 5950 evals, 100 iters, 110.8s, certified=True
-W=500 vol=0.0 random: 5950 evals, 100 iters, 18.7s, certified=True
-W=2000 vol=0.0 full: 20000 evals, 10 iters, 49.8s, certified=True
-W=2000 vol=0.0 oracle: 8950 evals, 100 iters, 398.8s, certified=True
-W=2000 vol=0.0 random: 15950 evals, 200 iters, 101.1s, certified=True
-W=500 vol=1.0 full: 2500 evals, 5 iters, 4.5s, certified=True
-W=500 vol=1.0 oracle: 5950 evals, 100 iters, 98.8s, certified=True
-W=500 vol=1.0 random: 5950 evals, 100 iters, 12.9s, certified=True
-W=2000 vol=1.0 full: 8000 evals, 4 iters, 14.0s, certified=True
-W=2000 vol=1.0 oracle: 8950 evals, 100 iters, 360.0s, certified=True
-W=2000 vol=1.0 random: 8950 evals, 100 iters, 21.1s, certified=True
-
-=== Capacity expansion summary ===
-W=500 vol=0.0 full     evals=   5500 iters=   11 wall= 10.6s certified=True
-W=500 vol=0.0 oracle   evals=   5950 iters=  100 wall=108.7s certified=True
-W=500 vol=0.0 random   evals=   5950 iters=  100 wall= 18.8s certified=True
-W=2000 vol=0.0 full     evals=  21000 iters=   10 wall= 52.7s certified=True
-W=2000 vol=0.0 oracle   evals=   8950 iters=  100 wall=395.0s certified=True
-W=2000 vol=0.0 random   evals=  15950 iters=  200 wall=101.3s certified=True
-W=500 vol=1.0 full     evals=   2250 iters=    4 wall=  4.0s certified=True
-W=500 vol=1.0 oracle   evals=   5950 iters=  100 wall= 97.0s certified=True
-W=500 vol=1.0 random   evals=   5950 iters=  100 wall= 12.3s certified=True
-W=2000 vol=1.0 full     evals=   8000 iters=    4 wall= 14.0s certified=True
-W=2000 vol=1.0 oracle   evals=   8950 iters=  100 wall=359.8s certified=True
-W=2000 vol=1.0 random   evals=   8950 iters=  100 wall= 20.9s certified=True
+W=500 vol=0.0 full     evals=   5500 iters=   11 wall= 12.1s certified=True
+W=500 vol=0.0 oracle   evals=   5950 iters=  100 wall=108.9s certified=True
+W=500 vol=0.0 random   evals=   5950 iters=  100 wall= 17.8s certified=True
+W=2000 vol=0.0 full     evals=  21000 iters=   10 wall= 53.1s certified=True
+W=2000 vol=0.0 oracle   evals=   8950 iters=  100 wall=376.1s certified=True
+W=2000 vol=0.0 random   evals=  15950 iters=  200 wall= 98.5s certified=True
+W=500 vol=1.0 full     evals=   2250 iters=    4 wall=  3.7s certified=True
+W=500 vol=1.0 oracle   evals=   5950 iters=  100 wall= 90.5s certified=True
+W=500 vol=1.0 random   evals=   5950 iters=  100 wall= 11.7s certified=True
+W=2000 vol=1.0 full     evals=   8000 iters=    4 wall= 13.1s certified=True
+W=2000 vol=1.0 oracle   evals=   8950 iters=  100 wall=329.7s certified=True
+W=2000 vol=1.0 random   evals=   8950 iters=  100 wall= 18.4s certified=True

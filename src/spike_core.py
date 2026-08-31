@@ -55,15 +55,15 @@ def make_trap_family(n=3, W=40, depth=None, per_group=5, tau=0.85, rng=None):
     group s has deep piece 10 + d*(y_s - tau), dominated by the shallow
     piece on y_s <= tau and active on the upper face y_s > tau. With
     d = W (the default) a single owner reveal repels the master from
-    y_s = 1 (uplift (1/W)*d*(1-tau) > |c_s|), the unclear ed coordinates
+    y_s = 1 (uplift (1/W)*d*(1-tau) > |c_s|), the uncleared coordinates
     stay at 1 with constant gap, and certification requires hitting every
     group -- one coordinate at a time."""
     rng = RNG(7) if rng is None else rng
     d = float(W) if depth is None else float(depth)
     sh_b = 10.0 + 1e-3 * rng.standard_normal(W)
     sh_a = 1e-3 * rng.standard_normal((W, n))               # flat: no signal
-    dp_b = sh_b.copy()                                       # non-owners single-piece
-    dp_a = np.zeros((W, n))
+    dp_b = sh_b.copy()                                       # non-owners: single piece
+    dp_a = sh_a.copy()
     idx = rng.permutation(W)
     groups = []
     for s in range(n):

@@ -86,20 +86,25 @@ def loglog_slope(d, col=0):
     y = np.array([d[t][col] for t in sorted(d)]) + 1e-9
     return float(np.polyfit(np.log(T), np.log(y), 1)[0])
 
-results = {}
-for mode in ["stationary", "rotating"]:
-    res = regret_scan(mode)
-    results[mode] = res
-    print(f"\n=== {mode} (W=50, K=5) — regret vs best-fixed-K ===")
-    print(f"{'T':<7} {'EXP3.M(mean±sd)':<20} {'fixed-share(mean±sd)':<22}")
-    for T, (pm, ps, fm, fs) in res.items():
-        print(f"{T:<7} {pm:>8.2f} ± {ps:<7.2f} {fm:>8.2f} ± {fs:<7.2f}")
-    print(f"EXP3.M regret log-log slope (vs T): {loglog_slope(res):.3f}  [sqrt(T) => 0.5]")
+def main():
+    results = {}
+    for mode in ["stationary", "rotating"]:
+        res = regret_scan(mode)
+        results[mode] = res
+        print(f"\n=== {mode} (W=50, K=5) — regret vs best-fixed-K ===")
+        print(f"{'T':<7} {'EXP3.M(mean±sd)':<20} {'fixed-share(mean±sd)':<22}")
+        for T, (pm, ps, fm, fs) in res.items():
+            print(f"{T:<7} {pm:>8.2f} ± {ps:<7.2f} {fm:>8.2f} ± {fs:<7.2f}")
+        print(f"EXP3.M regret log-log slope (vs T): {loglog_slope(res):.3f}  [sqrt(T) => 0.5]")
 
-# dynamic-oracle gap on rotating: how far policy is from per-round oracle
-rng = np.random.default_rng(7)
-G = make_gains(2000, 50, rng, mode="rotating")
-bf, oracle = baselines(G, 5)
-gp = exp3m(G, 5, alpha=0.05)
-print(f"\nrotating T=2000: policy={gp:.1f} best-fixed={bf:.1f} dynamic-oracle={oracle:.1f}")
-json.dump(results, open(os.path.join(RESULTS, "t2_results.json"), "w"), indent=1)
+    # dynamic-oracle gap on rotating: how far policy is from per-round oracle
+    rng = np.random.default_rng(7)
+    G = make_gains(2000, 50, rng, mode="rotating")
+    bf, oracle = baselines(G, 5)
+    gp = exp3m(G, 5, alpha=0.05)
+    print(f"\nrotating T=2000: policy={gp:.1f} best-fixed={bf:.1f} dynamic-oracle={oracle:.1f}")
+    json.dump(results, open(os.path.join(RESULTS, "t2_results.json"), "w"), indent=1)
+
+
+if __name__ == "__main__":
+    main()

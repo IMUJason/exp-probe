@@ -1,4 +1,4 @@
-[T3a] W=2000 K=20 (owners=15): full=2000 oracle=20 (1 it) random=161 (8 it) est-det=STALL ratio random/oracle=8.1x  [8s wall]
-[T3a] W=10000 K=50 (owners=15): full=10000 oracle=50 (1 it) random=1615 (274 it) est-det=STALL ratio random/oracle=32.3x  [186s wall]
-[T3b] recourse LP (32x48, 1584 vars, 80 rows): 5.75 ms mean (p95 7.01 ms) over 200 solves
-[T3b] projected per-iteration full eval: W=10000 -> 57.5s ; partial K=50 -> 0.288s  (headroom 200x)
+[T3a] W=2000 K=20 (owners=15): full=2000 oracle=20 (1 it) random=900 (45 it) est-det=STALL ratio random/oracle=45.0x  [9s wall]
+[T3a] W=10000 K=50 (owners=15): full=10000 oracle=50 (1 it) random=4750 (95 it) est-det=STALL ratio random/oracle=95.0x  [465s wall]
+[T3b] recourse LP (32x48, 1584 vars, 80 rows): 5.54 ms mean (p95 6.38 ms) over 200 solves
+[T3b] projected per-iteration full eval: W=10000 -> 55.4s ; partial K=50 -> 0.277s  (headroom 200x)

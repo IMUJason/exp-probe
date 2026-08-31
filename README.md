@@ -78,7 +78,7 @@ python make_figures.py
 
 | Paper | Source script | Source data |
 |---|---|---|
-| Table 1 (E1 separation) | `run_t1.py`, `run_t1_sparse.py`, `run_final_study.py` | `results/t1_results.json`, `results/t1_sparse_results.json`, `results/final_study_results.txt/json` |
+| Table 1 (E1 separation) | `run_t1.py`, `run_t1_sparse.py`, `run_final_study.py` | `results/t1_results.json`, `results/t1_sparse_results.json`, `results/final_study_results.txt` |
 | Table 2 (E2 regime map) | `run_e2e.py` | `results/e2e_results.txt/json` |
 | Table 3 (capacity expansion) | `run_cap_expansion.py` | `results/cap_expansion.log` |
 | Fig. 1 (regret scaling, Section 5) | `make_figures.py` | `results/t2_results.json` |

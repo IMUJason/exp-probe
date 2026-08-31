@@ -123,9 +123,6 @@ class RealPartialBenders:
             raise RuntimeError(res.message)
         return res.x[:I.n], res.x[I.n:], res.fun
 
-    def env_at(self, w, y):
-        return max(g @ y + b for (g, b) in self.cuts[w]) if self.cuts[w] else -1e18
-
     def run(self, rule, K, max_iter=400, rng=None):
         rng = RNG(0) if rng is None else rng
         I = self.I
@@ -159,9 +156,6 @@ class RealPartialBenders:
                 lb2 = self.master()[2]
                 if ub - lb2 <= self.eps * max(1.0, abs(ub)):
                     return evals, it, time.perf_counter() - t0
-                mass = I.p * (vals - theta)
-            else:
-                mass = None
             # selection
             if rule == "full":
                 S = np.arange(I.W)

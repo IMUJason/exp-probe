@@ -36,8 +36,12 @@ def run():
                 out.append((W, vol, rule, float(np.mean(evs)), float(np.mean(its)), float(np.mean(dts)), all(certs)))
                 print(f"W={W} vol={vol} {rule}: {evs[-1]:.0f} evals, {its[-1]} iters, {dts[-1]:.1f}s, certified={certs[-1]}", flush=True)
     print("\n=== Capacity expansion summary ===")
+    lines = []
     for W, vol, rule, ev, it, dt, cert in out:
-        print(f"W={W} vol={vol} {rule:8s} evals={ev:7.0f} iters={it:5.0f} wall={dt:5.1f}s certified={cert}")
+        l = f"W={W} vol={vol} {rule:8s} evals={ev:7.0f} iters={it:5.0f} wall={dt:5.1f}s certified={cert}"
+        print(l); lines.append(l)
+    with open(os.path.join(RESULTS, "cap_expansion.log"), "w") as f:
+        f.write("\n".join(lines) + "\n")
 
 if __name__ == "__main__":
     run()
