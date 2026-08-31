@@ -1,0 +1,24 @@
+vol=0.0 K=10   full     evals=   3000 iters=  6.0
+vol=0.0 K=10   oracle   evals=   1990 iters=100.0
+vol=0.0 K=10   random   evals=   3490 iters=200.0
+vol=0.0 K=25   full     evals=   3000 iters=  6.0
+vol=0.0 K=25   oracle   evals=   3475 iters=100.0
+vol=0.0 K=25   random   evals=   4975 iters=150.0
+vol=0.0 K=50   full     evals=   3000 iters=  6.0
+vol=0.0 K=50   oracle   evals=   5950 iters=100.0
+vol=0.0 K=50   random   evals=   5950 iters=100.0
+vol=0.0 K=100  full     evals=   3000 iters=  6.0
+vol=0.0 K=100  oracle   evals=  10900 iters=100.0
+vol=0.0 K=100  random   evals=  10900 iters=100.0
+vol=1.0 K=10   full     evals=   1000 iters=  2.0
+vol=1.0 K=10   oracle   evals=   1990 iters=100.0
+vol=1.0 K=10   random   evals=   1990 iters=100.0
+vol=1.0 K=25   full     evals=   1000 iters=  2.0
+vol=1.0 K=25   oracle   evals=   3475 iters=100.0
+vol=1.0 K=25   random   evals=   3475 iters=100.0
+vol=1.0 K=50   full     evals=   1000 iters=  2.0
+vol=1.0 K=50   oracle   evals=   5950 iters=100.0
+vol=1.0 K=50   random   evals=   5950 iters=100.0
+vol=1.0 K=100  full     evals=   1000 iters=  2.0
+vol=1.0 K=100  oracle   evals=  10900 iters=100.0
+vol=1.0 K=100  random   evals=  10900 iters=100.0
