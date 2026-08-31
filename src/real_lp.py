@@ -10,8 +10,8 @@ Benders cut from subproblem duals: dQ/dy_i = K_i * mu_i (mu = capacity duals).
 
 Concentration knob: scenario volatility vol_w is heterogeneous — a sparse set
 of high-volatility scenarios carries most of the recourse mass, so informed
-selection should win; the homogeneous case reproduces the ARCH-style flat
-regime where it should not.
+selection should win; the homogeneous case reproduces the diffuse-mass regime
+in which per-scenario differences are small.
 """
 from __future__ import annotations
 
@@ -117,20 +117,14 @@ class RealPartialBenders:
     def env_at(self, w, y):
         return max(g @ y + b for (g, b) in self.cuts[w]) if self.cuts[w] else -1e18
 
-    def run(self, rule, K, max_iter=400, rng=None, budget_log=None):
+    def run(self, rule, K, max_iter=400, rng=None):
         rng = RNG(0) if rng is None else rng
         I = self.I
-        # initial cut per scenario from one cheap evaluation at y0=0.5 (standard warm start)
-        y0 = np.full(I.n, 0.5)
         evals = 0
         t0 = time.perf_counter()
-        # warm start: each scenario evaluated once at y0 — charged to the rule
-        order = rng.permutation(I.W) if rule in ("random", "exp-probe") else np.arange(I.W)
         logw = np.zeros(I.W)
-        warm_done = np.zeros(I.W, bool)
         for it in range(1, max_iter + 1):
             y, theta, lb = self.master()
-            check = (it % self.T_chk == 0) or (it == 1)
             if rule == "full":
                 vals, grads = I.eval_all(y); evals += I.W
                 for w in range(I.W):
@@ -158,7 +152,7 @@ class RealPartialBenders:
                 mass = I.p * (vals - theta)
             else:
                 mass = None
-            # --- selection
+            # selection
             if rule == "full":
                 S = np.arange(I.W)
             elif rule == "random":
@@ -174,7 +168,7 @@ class RealPartialBenders:
                 S = rng.choice(I.W, size=K, replace=False, p=p)
             else:
                 raise ValueError(rule)
-            # --- evaluate & cut
+            # evaluate selected scenarios and add cuts
             for w in S:
                 v, g = I.solve_sub(w, y); evals += 1
                 cut = (g.copy(), float(v - g @ y))

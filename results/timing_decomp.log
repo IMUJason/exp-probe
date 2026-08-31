@@ -1,0 +1,4 @@
+W=500 vol=0.0 full    : master= 0.22s ( 4.0%)  subprob= 5.16s (96.0%)  total=  5.4s
+W=500 vol=0.0 oracle  : master= 2.85s ( 3.0%)  subprob=93.53s (97.0%)  total= 96.4s
+W=500 vol=1.0 full    : master= 0.02s ( 1.2%)  subprob= 1.54s (98.8%)  total=  1.6s
+W=500 vol=1.0 oracle  : master= 0.87s ( 0.9%)  subprob=91.55s (99.1%)  total= 92.4s

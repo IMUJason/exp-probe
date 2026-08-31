@@ -1,7 +1,9 @@
 """Fixed-share ablation: does fixed-share repair rotating non-stationarity?"""
-import sys
-sys.path.insert(0, "../src")
-import numpy as np, json
+import os, sys, json
+HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.join(HERE, "..", "src"))
+RESULTS = os.path.normpath(os.path.join(HERE, "..", "results"))
+import numpy as np
 
 def make_gains(T, W, rng, mode="stationary", n_heavy=6, n_blocks=5):
     base = np.zeros(W)
@@ -82,4 +84,4 @@ for mode in ["stationary", "rotating"]:
     print(f"\n=== {mode} ===")
     for k, (m, s) in res.items():
         print(f"  {k}: regret={m:8.2f} ± {s:6.2f}")
-    json.dump(res, open(f"../results/fixed_share_{mode}.json", "w"), indent=1)
+    json.dump(res, open(os.path.join(RESULTS, f"fixed_share_{mode}.json"), "w"), indent=1)

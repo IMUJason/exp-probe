@@ -1,6 +1,8 @@
-"""E2e: final E2 — fixed oracle semantics, sufficient iteration caps."""
-import sys, json, time
-sys.path.insert(0, ".")
+"""E2: real-LP regime map with pricing-device oracle semantics."""
+import os, sys, json, time
+HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.join(HERE, "..", "src"))
+RESULTS = os.path.normpath(os.path.join(HERE, "..", "results"))
 import numpy as np
 from real_lp import RealLPInstance, RealPartialBenders
 
@@ -29,6 +31,6 @@ for k, rows in R.items():
     for rule in rows:
         if rule != 'full':
             out.append(f"  {k} {rule}: {rows[rule][0]/f:.2f}x full (certified={rows[rule][4]})")
-open("e2e_results.txt", "w").write("\n".join(out))
-json.dump(R, open("e2e_results.json", "w"), indent=1)
+open(os.path.join(RESULTS, "e2e_results.txt"), "w").write("\n".join(out))
+json.dump(R, open(os.path.join(RESULTS, "e2e_results.json"), "w"), indent=1)
 print("saved")

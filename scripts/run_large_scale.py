@@ -1,6 +1,8 @@
 """Large-scale sparse-trap: W=100000."""
-import sys, json
-sys.path.insert(0, "../src")
+import os, sys, json
+HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.join(HERE, "..", "src"))
+RESULTS = os.path.normpath(os.path.join(HERE, "..", "results"))
 from spike_core import make_trap_family, eval_counts
 
 def make_trap_sparse_100k(W=100000, per_group=5, depth=600.0, tau=0.85):
@@ -16,4 +18,4 @@ inst, _ = make_trap_sparse_100k()
 res = eval_counts(inst, eps=1e-3, K=50, reps=1, max_iter=3000)
 out = {k: v for k, v in res.items()}
 print(json.dumps(out, indent=1))
-open("../results/large_scale_w100k.json", "w").write(json.dumps(out, indent=1))
+open(os.path.join(RESULTS, "large_scale_w100k.json"), "w").write(json.dumps(out, indent=1))

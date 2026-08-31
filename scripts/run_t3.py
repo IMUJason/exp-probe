@@ -1,7 +1,9 @@
-"""Spike-T3: (a) eval-count separation at scale on the sparse-trap family;
-(b) real-LP subproblem timing probe at ARCH-like sizes."""
-import sys, time, json
-sys.path.insert(0, ".")
+"""T3: (a) eval-count separation at scale on the sparse-trap family;
+(b) recourse LP timing at the problem sizes used in E2."""
+import os, sys, time
+HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.join(HERE, "..", "src"))
+RESULTS = os.path.normpath(os.path.join(HERE, "..", "results"))
 import numpy as np
 from scipy.optimize import linprog
 from run_t1_sparse import make_trap_sparse
@@ -49,6 +51,5 @@ out.append(f"[T3b] recourse LP (32x48, {nv} vars, {n_cus+n_fac} rows): {ms:.2f} 
 out.append(f"[T3b] projected per-iteration full eval: W=10000 -> {10000*ms/1000:.1f}s ; "
            f"partial K=50 -> {50*ms/1000:.3f}s  (headroom {10000/50:.0f}x)")
 
-open("t3_results.txt", "w").write("\n".join(out))
+open(os.path.join(RESULTS, "t3_results.txt"), "w").write("\n".join(out))
 print("\n".join(out))
-json.dump({"t3b_ms_per_lp": ms}, open("t3_results.json", "w"))

@@ -1,12 +1,14 @@
-"""Final computational study for the regret-probing paper.
+"""E1 sparse-trap scaling and the E2 concentration sweep.
 
 E1  PWL separation (sparse-trap family) with EXP-Probe included, W in {2000, 10000}.
 E2  Real-LP testbed: concentration sweep — sparse_vol in {0 (flat), 0.5, 1.0 (sparse-hot)},
     W=500, K=25, rules {full, random, oracle, exp-probe}; reports evaluations to
     certification and wall time.
 """
-import sys, time, json
-sys.path.insert(0, ".")
+import os, sys, json, time
+HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.join(HERE, "..", "src"))
+RESULTS = os.path.normpath(os.path.join(HERE, "..", "results"))
 import numpy as np
 
 out = []
@@ -54,6 +56,6 @@ for vol in [0.0, 0.5, 1.0]:
                    f"vs full {E2[vol]['full'][3]:.1f}s")
     print(out[-1], flush=True)
 
-open("final_study_results.txt", "w").write("\n".join(out))
-json.dump({"E2": {str(k): v for k, v in E2.items()}}, open("final_study_results.json", "w"), indent=1)
+open(os.path.join(RESULTS, "final_study_results.txt"), "w").write("\n".join(out))
+json.dump({"E2": {str(k): v for k, v in E2.items()}}, open(os.path.join(RESULTS, "final_study_results.json"), "w"), indent=1)
 print("saved final_study_results.txt/json")

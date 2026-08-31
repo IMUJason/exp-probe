@@ -8,8 +8,10 @@ Setting: n candidate expansion projects, each with capacity gain K_i and
 fixed cost f_i; first stage selects which projects to activate (binary).
 Recourse: transport from expanded capacities to demands with scenario costs.
 """
-import sys, time
-sys.path.insert(0, "../src")
+import os, sys, time
+HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.join(HERE, "..", "src"))
+RESULTS = os.path.normpath(os.path.join(HERE, "..", "results"))
 import numpy as np
 from real_lp import RealLPInstance, RealPartialBenders
 

@@ -1,6 +1,8 @@
 """Instance-cluster bootstrap: is oracle's advantage over random significant?"""
-import sys, json
-sys.path.insert(0, "../src")
+import os, sys, json
+HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.join(HERE, "..", "src"))
+RESULTS = os.path.normpath(os.path.join(HERE, "..", "results"))
 import numpy as np
 from spike_core import make_trap_family, eval_counts
 
@@ -34,4 +36,4 @@ lo, hi = np.percentile(boots, [2.5, 97.5])
 print(f"random - oracle (sparse-trap W=2000): mean={diffs.mean():.1f}, 95% CI=[{lo:.1f}, {hi:.1f}]")
 print(f"significant (CI excludes 0): {lo > 0 or hi < 0}")
 json.dump({"mean_diff": float(diffs.mean()), "ci_lo": float(lo), "ci_hi": float(hi),
-           "n_reps": len(diffs)}, open("../results/bootstrap_significance.json", "w"))
+           "n_reps": len(diffs)}, open(os.path.join(RESULTS, "bootstrap_significance.json"), "w"))

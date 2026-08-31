@@ -1,6 +1,8 @@
 """Wall-clock decomposition: selection / master / subproblem / certification."""
-import sys, time
-sys.path.insert(0, "../src")
+import os, sys, time
+HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.join(HERE, "..", "src"))
+RESULTS = os.path.normpath(os.path.join(HERE, "..", "results"))
 import numpy as np
 from real_lp import RealLPInstance, RealPartialBenders
 

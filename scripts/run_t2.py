@@ -1,11 +1,16 @@
-"""Spike-T2: conditional (fixed-trajectory) regret numerics.
+"""T2: conditional (fixed-trajectory) regret numerics.
 
 Semi-bandit EXP3.M over W scenarios, K selected per round, gains in [0,1].
 Stationary and block-rotating (non-stationary) gain processes.
-Checks: policy regret vs best-fixed-K scales ~ sqrt(T ln W); fixed-share
-variant tracks rotating heavy sets where plain EXP3.M degrades.
+Verifies that regret against the best fixed K-set scales ~sqrt(T ln W) and
+that a fixed-share variant tracks rotating heavy sets where plain EXP3.M
+degrades.
 """
-import numpy as np, json
+import os, json
+import numpy as np
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+RESULTS = os.path.normpath(os.path.join(HERE, "..", "results"))
 
 def make_gains(T, W, rng, mode="stationary", n_heavy=6, n_blocks=5):
     base = np.zeros(W)
@@ -87,4 +92,4 @@ bf, oracle = baselines(G, 5)
 eta = np.sqrt(np.log(50) / (2000 * 5))
 gp = exp3m(G, 5, eta, 0.05)
 print(f"\nrotating T=2000: policy={gp:.1f} best-fixed={bf:.1f} dynamic-oracle={oracle:.1f}")
-json.dump(results, open("t2_results.json", "w"), indent=1)
+json.dump(results, open(os.path.join(RESULTS, "t2_results.json"), "w"), indent=1)

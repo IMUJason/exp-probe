@@ -1,8 +1,10 @@
-"""Spike-T1b: sparse-relevance variant — rest scenarios are single-piece
+"""T1b: sparse-relevance variant — rest scenarios are single-piece
 (deep == shallow, always exactly known), only the 15 trap owners matter.
 Oracle should pay O(#owners), random pays a coupon collector over W."""
-import sys, json
-sys.path.insert(0, ".")
+import os, sys, json
+HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.join(HERE, "..", "src"))
+RESULTS = os.path.normpath(os.path.join(HERE, "..", "results"))
 import numpy as np
 from spike_core import make_trap_family, eval_counts, PWLInstance, RNG
 
@@ -22,4 +24,4 @@ for rule, (em, es, im, isd) in res.items():
     print(f"{rule:<12} {em:>8.0f} ± {es:<6.0f} {im:>8.1f} ± {isd:<5.1f}")
 o = res['oracle'][0]; r = res['random'][0]
 print(f"\nrandom/oracle = {r/max(o,1):.1f}x   (oracle pays ~{o:.0f} evals vs W={inst.W})")
-json.dump(res, open("t1_sparse_results.json", "w"), indent=1)
+json.dump(res, open(os.path.join(RESULTS, "t1_sparse_results.json"), "w"), indent=1)

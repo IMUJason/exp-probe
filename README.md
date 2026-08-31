@@ -80,9 +80,13 @@ python make_figures.py
 | Table 3 (capacity expansion) | `run_cap_expansion.py` | `results/cap_expansion.log` |
 | Fig. 1 (regret scaling, Section 5) | `make_figures.py` | `results/t2_results.json` |
 | Fig. 2 (E1 scaling) | `make_figures.py` | `results/t1_sparse_results.json`, `results/final_study_results.txt` |
-| Fig. 3 (E2 regime) | `make_figures.py` | `results/e2e_results.txt` |
+| Fig. 3 (E2 regime) | `make_figures.py` | `results/e2e_results.json` |
 | Fixed-share ablation (Section 5) | `run_fixed_share.py` | `results/fixed_share_{stationary,rotating}.json` |
 | Bootstrap significance (Section 6) | `run_bootstrap.py` | `results/bootstrap_significance.json` |
+| Timing decomposition (Section 6) | `run_timing_decomp.py` | `results/timing_decomp.log` |
+
+`make_figures.py` reads the result files directly, so the figures regenerate
+from the same numbers the tables report.
 
 ## License
 
@@ -92,7 +96,7 @@ MIT License.
 
 Jin Xin Cao (imucjx@163.com)
 
-## Scaling notes (2026-08-31)
+## Scaling limits
 
 The W=10,000 sparse-trap results are certified and reported in the paper.
 The W=100,000 run (`scripts/run_large_scale.py`) was not completed: the

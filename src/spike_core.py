@@ -1,4 +1,4 @@
-"""Spike core v2: partial-evaluation Benders on piecewise-linear two-stage LP instances.
+"""Partial-evaluation Benders on piecewise-linear two-stage LP instances.
 
 Setting A (anchor-partial): min_y c'y + sum_w p_w Q_w(y), y in [0,1]^n,
 Q_w(y) = max_j (a_wj' y + b_wj).  Each iteration the master LP over revealed
@@ -14,8 +14,6 @@ Families:
                a nearest-point surrogate is exact for any evaluated scenario,
                so informed exploration costs ~W while random pays coupon-
                collector overhead.
-
-Run with: /opt/anaconda3/envs/env310/bin/python
 """
 
 from __future__ import annotations
@@ -27,8 +25,8 @@ RNG = np.random.default_rng
 
 
 class PWLInstance:
-    """Pieces are stored as (a, b) with value a'y + b, used EVERYWHERE
-    (values(), cut pools, master LP)."""
+    """Pieces are stored as (a, b) with value a'y + b; the convention is
+    shared by values(), the cut pools, and the master LP."""
 
     def __init__(self, n, W, sh_b, sh_a, dp_b, dp_a, c, p=None):
         self.n, self.W = n, W

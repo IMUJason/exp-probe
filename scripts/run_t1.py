@@ -1,6 +1,8 @@
-"""Spike-T1: separation between selection rules on two instance families."""
-import sys, json
-sys.path.insert(0, ".")
+"""T1: separation between selection rules on two instance families."""
+import os, sys, json
+HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.join(HERE, "..", "src"))
+RESULTS = os.path.normpath(os.path.join(HERE, "..", "results"))
 from spike_core import make_trap_family, make_informative_family, eval_counts
 
 results = {}
@@ -17,4 +19,4 @@ for name, inst in [("trap (no signal)", instA), ("informative (signal exists)", 
 for name, res in results.items():
     o = res['oracle'][0]; r = res['random'][0]
     print(f"\n[{name}] random/oracle={r/max(o,1):.1f}x  est-det/oracle={res['est-det'][0]/max(o,1):.1f}x  est-nn/oracle={res['est-nn'][0]/max(o,1):.1f}x")
-json.dump(results, open("t1_results.json", "w"), indent=1)
+json.dump(results, open(os.path.join(RESULTS, "t1_results.json"), "w"), indent=1)

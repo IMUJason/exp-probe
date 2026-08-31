@@ -8,11 +8,11 @@ W ≥ 10^4 and that we document the failure mode here.
 
 `src/spike_core.py`, method `run(...)`, the two `rule == "exp-probe"` branches:
 
-- **Sampling** (~lines 161–167): weights are stored as log-weights `logw`.
+- **Sampling** (lines ~159–165): weights are stored as log-weights `logw`.
   Before sampling we compute `wts = np.exp(logw - logw.max())`, normalize to a
   distribution, apply exploration mixing `p = 0.95 * p + 0.05 / W`, and draw
   `K` scenarios without replacement with probabilities `p`.
-- **Update** (~lines 196–206): for each evaluated scenario the revealed mass
+- **Update** (lines ~193–203): for each evaluated scenario the revealed mass
   `g_w = p_w (Q_w(y_t) − θ_{w,t})` is importance-weighted by the inclusion
   bound `p̂_w = min(1, K·p_w)` and applied multiplicatively in log space,
   `logw[w] += η·g_w / (K·p̂_w)` with `η = sqrt(ln W / (t·K))`; afterwards the
@@ -59,4 +59,4 @@ print(w.max(), w.sum())                        # inf / inf — collapsed
 
 The log-space variant in `src/spike_core.py` runs the same schedule without
 any overflow for the horizons used in the paper (T up to 4,000 in the regret
-scans and W = 10^000 in E1).
+scans and W = 10^4 in E1).
