@@ -80,9 +80,9 @@ ax.plot(Ts, [rotating[t] for t in Ts], "s-", color=C["exp"], label="Rotating gai
 ref = Ts ** 0.5
 ax.plot(Ts, ref / ref[0] * stationary[500], ":", color=C["sqrt"], lw=1,
         label=r"$\sqrt{T}$ reference")
-lin = Ts ** 0.844
+lin = Ts ** (2.0 / 3.0)
 ax.plot(Ts, lin / lin[0] * rotating[500], "--", color=C["sqrt"], lw=1,
-        label=r"$T^{0.84}$ reference")
+        label=r"$T^{2/3}$ reference")
 ax.set_xscale("log"); ax.set_yscale("log")
 ax.set_xlabel(r"horizon $T$"); ax.set_ylabel("regret vs. best fixed $K$-set")
 ax.set_xticks(Ts); ax.set_xticklabels(["500", "1,000", "2,000", "4,000"])

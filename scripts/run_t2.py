@@ -6,8 +6,12 @@ Verifies that regret against the best fixed K-set scales ~sqrt(T ln W) and
 that a fixed-share variant tracks rotating heavy sets where plain EXP3.M
 degrades.
 """
-import os, json
+import os, sys, json
 import numpy as np
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.join(HERE, "..", "src"))
+from sampling import marginals_and_round
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 RESULTS = os.path.normpath(os.path.join(HERE, "..", "results"))
@@ -29,9 +33,9 @@ def make_gains(T, W, rng, mode="stationary", n_heavy=6, n_blocks=5):
     return G
 
 def exp3m(G, K, eta=None, alpha=0.0):
-    """EXP3.M with the paper's estimator: selected gains divided by the
-    inclusion lower bound min{K p / 2, 1/2}; eta=None uses the theorem's
-    constant rate eta = sqrt(K ln W / (T W)) with T the horizon."""
+    """EXP3.M via dependent rounding: exact inclusion marginals make the
+    gain estimates unbiased; eta=None uses the theorem's constant rate
+    sqrt(K ln W / (T W)). Gains and benchmark are totals over the K-set."""
     T, W = G.shape
     if eta is None:
         eta = np.sqrt(K * np.log(W) / (T * W))
@@ -41,8 +45,7 @@ def exp3m(G, K, eta=None, alpha=0.0):
     for t in range(1, T + 1):
         wts = np.exp(logw - logw.max())
         p = wts / wts.sum()
-        S = rng.choice(W, size=K, replace=False, p=p)
-        incl = np.minimum(K * p / 2.0, 0.5)
+        incl, S = marginals_and_round(p, K, rng)   # exact marginals
         ghat = np.zeros(W)
         ghat[S] = G[t - 1, S] / np.maximum(incl[S], 1e-12)
         logw = logw + eta * ghat
@@ -51,15 +54,15 @@ def exp3m(G, K, eta=None, alpha=0.0):
             wts2 = np.exp(logw - logw.max())
             wts2 = (1 - alpha) * wts2 + alpha / W
             logw = np.log(np.maximum(wts2, 1e-10))
-        gain_policy += G[t - 1, S].mean()
+        gain_policy += G[t - 1, S].sum()
     return gain_policy
 
 def baselines(G, K):
     T, W = G.shape
     cum = G.sum(axis=0)
     best_fixed_idx = np.argsort(cum)[::-1][:K]
-    bf = G[:, best_fixed_idx].mean(axis=1).sum()
-    oracle = np.sort(G, axis=1)[:, ::-1][:, :K].mean(axis=1).sum()
+    bf = G[:, best_fixed_idx].sum(axis=1).sum()
+    oracle = np.sort(G, axis=1)[:, ::-1][:, :K].sum(axis=1).sum()
     return bf, oracle
 
 def regret_scan(mode, W=50, K=5, Ts=(500, 1000, 2000, 4000), reps=10):

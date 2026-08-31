@@ -1,5 +1,5 @@
 """T1b: sparse-relevance variant — rest scenarios are single-piece
-(deep == shallow, always exactly known), only the 15 trap owners matter.
+(deep == shallow, always exactly known), only the trap owners matter.
 Oracle should pay O(#owners), random pays a coupon collector over W."""
 import os, sys, json
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -8,8 +8,9 @@ RESULTS = os.path.normpath(os.path.join(HERE, "..", "results"))
 import numpy as np
 from spike_core import make_trap_family, eval_counts, PWLInstance, RNG
 
-def make_trap_sparse(W=200, per_group=5, depth=600.0, tau=0.85):
-    inst, groups = make_trap_family(n=2, W=W, per_group=per_group, depth=depth, tau=tau)
+def make_trap_sparse(W=200, per_group=5, depth=None, tau=0.85):
+    """r=3 coordinate groups of per_group owners; depth None -> d=W (Assumption 1 scaling)."""
+    inst, groups = make_trap_family(n=3, W=W, per_group=per_group, depth=depth, tau=tau)
     rest = [w for w in range(W) if not any(w in g for g in groups)]
     rest = np.array(rest)
     inst.dp_b[rest] = inst.sh_b[rest]

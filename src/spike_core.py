@@ -21,6 +21,8 @@ from __future__ import annotations
 import numpy as np
 from scipy.optimize import linprog
 
+from sampling import marginals_and_round
+
 RNG = np.random.default_rng
 
 
@@ -46,24 +48,27 @@ class PWLInstance:
         return (self.dp_b[None, :] + Y @ self.dp_a.T) >= (self.sh_b[None, :] + Y @ self.sh_a.T)
 
 
-def make_trap_family(n=2, W=40, depth=600.0, per_group=5, tau=0.85, rng=None):
-    """Localized traps: owner's deep piece value = 10 + depth*(v'y - tau),
-    active only where v'y > tau (v = unit corner direction)."""
+def make_trap_family(n=3, W=40, depth=None, per_group=5, tau=0.85, rng=None):
+    """Coordinate-staircase traps: group s binds coordinate s. An owner of
+    group s has deep piece 10 + d*(y_s - tau), dominated by the shallow
+    piece on y_s <= tau and active on the upper face y_s > tau. With
+    d = W (the default) a single owner reveal repels the master from
+    y_s = 1 (uplift (1/W)*d*(1-tau) > |c_s|), the unclear ed coordinates
+    stay at 1 with constant gap, and certification requires hitting every
+    group -- one coordinate at a time."""
     rng = RNG(7) if rng is None else rng
+    d = float(W) if depth is None else float(depth)
     sh_b = 10.0 + 1e-3 * rng.standard_normal(W)
     sh_a = 1e-3 * rng.standard_normal((W, n))               # flat: no signal
-    dp_b = np.full(W, 10.15)
-    dp_a = 0.05 * np.abs(rng.standard_normal((W, n)))       # harmless: always mildly dominant
-    corners = [np.ones(n)]                                   # greedy corner first
-    for s in range(1, n + 1):
-        v = np.zeros(n); v[(s - 1) % n] = 1.0
-        corners.append(v)
+    dp_b = sh_b.copy()                                       # non-owners single-piece
+    dp_a = np.zeros((W, n))
     idx = rng.permutation(W)
     groups = []
-    for g, corner in enumerate(corners):
-        owners = idx[W - per_group * (g + 1): W - per_group * g]
-        dp_a[owners, :] = depth * corner[None, :]
-        dp_b[owners] = 10.0 - depth * tau
+    for s in range(n):
+        owners = idx[W - per_group * (s + 1): W - per_group * s]
+        dp_a[owners, :] = 0.0
+        dp_a[owners, s] = d
+        dp_b[owners] = 10.0 - d * tau
         groups.append(owners)
     c = -0.05 * np.ones(n)                                   # greedy corner (1,..,1)
     return PWLInstance(n, W, sh_b, sh_a, dp_b, dp_a, c), groups
@@ -158,11 +163,11 @@ class PartialBenders:
                 mass = self.I.p * (true_vals - theta)
                 S = np.argsort(mass)[::-1][:K]
             elif rule == "exp-probe":
-                # semi-bandit EXP3.M, log-space, sampling w/o replacement
+                # semi-bandit EXP3.M: DepRound sampling with exact marginals
                 wts = np.exp(logw - logw.max())
                 p = wts / wts.sum()
                 q = 0.95 * p + 0.05 / self.I.W      # gamma-mixed sampling distribution
-                S = rng.choice(self.I.W, size=min(K, self.I.W), replace=False, p=q)
+                incl, S = marginals_and_round(q, min(K, self.I.W), rng)
             elif rule in ("est-det", "est-rand", "est-nn", "surr-error"):
                 if rule == "est-nn":
                     est, has = self._surrogate_nn(y)
@@ -182,22 +187,14 @@ class PartialBenders:
                     S = np.argsort(-mass_est, kind="stable")[:K]  # lowest-index ties
             else:
                 raise ValueError(rule)
-            fresh = np.array([not any(np.allclose(p, y, atol=1e-9) for p in self.hist_points[w])
-                              for w in S])
-            S_eff = S if rule == "full" else S[fresh]        # cache: skip re-evals at y
-            if len(S_eff) == 0:
-                stall += 1
-                if stall >= 30:
-                    return evals, max_iter                    # deterministic stall
-                S_eff = S                                     # allow a wasted pass
+            # protocol accounting: the rule is charged for all K selections
+            # each round (re-evaluations at a stationary point cost budget
+            # and add no new cut); est-det's repetition is what stalls it
+            S_eff = S
             new = self.reveal(S_eff, y)
             if rule == "exp-probe":
-                # importance-weighted semi-bandit update on revealed mass;
-                # divisor is the inclusion lower bound min{K q / 2, 1/2}
-                wts = np.exp(logw - logw.max())
-                p = wts / wts.sum()
-                q = 0.95 * p + 0.05 / self.I.W
-                incl = np.minimum(K * q / 2.0, 0.5)
+                # unbiased semi-bandit update: divide by the exact marginal
+                # computed at selection time (incl is deterministic in q)
                 for w in S_eff:
                     mass_w = float(self.I.p[w] * (true_vals[w] - theta[w]))
                     gain = max(mass_w, 0.0)
@@ -205,7 +202,12 @@ class PartialBenders:
                 logw -= logw.max()
             evals += len(S_eff)
             stall = 0 if new else stall + 1
-            if stall >= 50:
+            # early exit is sound only for rules that repeat a fixed
+            # selection (deterministic ties): they provably add no new cut.
+            # Randomized rules keep a nonzero exploration mass and stay live.
+            if rule in ("est-det", "surr-error") and stall >= 30:
+                return evals, max_iter
+            if stall >= 300:
                 return evals, max_iter
         return evals, max_iter
 

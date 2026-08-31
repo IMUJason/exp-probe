@@ -1,12 +1,11 @@
 """Second problem class: capacity expansion (2-stage LP).
 
-Distinguishes from facility location: capacity expansion has integer master
-(open/expand facilities), continuous recourse (flow allocation), and a
-different dual structure.  Same protocol as facility opening.
-
-Setting: n candidate expansion projects, each with capacity gain K_i and
-fixed cost f_i; first stage selects which projects to activate (binary).
-Recourse: transport from expanded capacities to demands with scenario costs.
+A scaled-capacity variant of the facility-opening generator: expansion
+capacities are 1.5x larger and lumpier, on the same continuous master and
+the same recourse structure. This varies the recourse geometry and cost
+scale; structural generality beyond facility opening is not established
+here. A genuinely binary master is probed separately in
+run_cap_expansion_milp.py.
 """
 import os, sys, time
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -16,19 +15,12 @@ import numpy as np
 from real_lp import RealLPInstance, RealPartialBenders
 
 class CapacityExpansionInstance(RealLPInstance):
-    """Capacity expansion variant: binary first stage (choose projects),
-    continuous recourse (flow).  Uses the same recourse structure but the
-    master is a pure binary IP and the capacity coupling is additive."""
+    """Scaled-capacity variant on the same continuous master and recourse
+    structure: expansion capacities are 1.5x the facility-opening ones."""
 
     def __init__(self, n=16, m=30, W=500, sparse_vol=0.5, seed=0):
         super().__init__(n=n, m=m, W=W, sparse_vol=sparse_vol, seed=seed)
-        # capacity expansion: base capacity zero, expansion adds K_i
-        self.base_cap = np.zeros(n)
-        # expansion yields are larger and lumpier than facility opening
         self.K = self.K * 1.5
-
-    # master stays LP (y in [0,1] with binary relaxation); the distinction
-    # is in the capacity coupling (additive) vs facility opening (multiplicative)
 
 def run():
     out = []

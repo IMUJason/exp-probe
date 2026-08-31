@@ -6,8 +6,8 @@ RESULTS = os.path.normpath(os.path.join(HERE, "..", "results"))
 import numpy as np
 from spike_core import make_trap_family, eval_counts
 
-def make_trap_sparse(W=2000, per_group=5, depth=600.0, tau=0.85):
-    inst, groups = make_trap_family(n=2, W=W, per_group=per_group, depth=depth, tau=tau)
+def make_trap_sparse(W=2000, per_group=5, depth=None, tau=0.85):
+    inst, groups = make_trap_family(n=3, W=W, per_group=per_group, depth=depth, tau=tau)
     rest = [w for w in range(W) if not any(w in g for g in groups)]
     rest = np.array(rest)
     inst.dp_b[rest] = inst.sh_b[rest]

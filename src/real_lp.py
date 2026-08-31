@@ -18,6 +18,8 @@ from __future__ import annotations
 import time
 import numpy as np
 from scipy.optimize import linprog, milp, LinearConstraint, Bounds
+
+from sampling import marginals_and_round
 from scipy.sparse import coo_matrix
 
 RNG = np.random.default_rng
@@ -179,7 +181,7 @@ class RealPartialBenders:
             elif rule == "exp-probe":
                 wts = np.exp(logw - logw.max()); p = wts / wts.sum()
                 q = 0.95 * p + 0.05 / I.W          # gamma-mixed sampling distribution
-                S = rng.choice(I.W, size=K, replace=False, p=q)
+                incl, S = marginals_and_round(q, K, rng)   # exact marginals
             else:
                 raise ValueError(rule)
             # evaluate selected scenarios and add cuts
@@ -191,8 +193,7 @@ class RealPartialBenders:
                     self.cuts[w].append(cut)
                 if rule == "exp-probe":
                     m_w = float(I.p[w] * (v - theta[w]))
-                    incl = min(K * q[w] / 2.0, 0.5)   # inclusion lower bound
-                    logw[w] += eta * max(m_w, 0.0) / max(incl, 1e-12)
+                    logw[w] += eta * max(m_w, 0.0) / max(incl[w], 1e-12)
             if rule == "exp-probe":
                 logw -= logw.max()
         return evals, max_iter, time.perf_counter() - t0
