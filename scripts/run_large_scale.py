@@ -5,8 +5,8 @@ sys.path.insert(0, os.path.join(HERE, "..", "src"))
 RESULTS = os.path.normpath(os.path.join(HERE, "..", "results"))
 from spike_core import make_trap_family, eval_counts
 
-def make_trap_sparse_100k(W=100000, per_group=5, depth=600.0, tau=0.85):
-    inst, groups = make_trap_family(n=2, W=W, per_group=per_group, depth=depth, tau=tau)
+def make_trap_sparse_100k(W=100000, per_group=5, depth=None, tau=0.85):
+    inst, groups = make_trap_family(n=3, W=W, per_group=per_group, depth=depth, tau=tau)
     rest = [w for w in range(W) if not any(w in g for g in groups)]
     import numpy as np
     rest = np.array(rest)

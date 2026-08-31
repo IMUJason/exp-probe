@@ -6,10 +6,12 @@ cuts gives y_t; the rule picks K scenarios; selected scenarios reveal their
 active piece at y_t.  Ground truth (true gap) is tracked by the simulator.
 
 Families:
-  trap       - shallow pieces carry no signal; localized deep "traps" sit at a
-               staircase of greedy corners.  Deterministic oblivious rules
-               (lowest-index ties) never find the owners; oracle does; random
-               needs a coupon-collector number of draws.
+  trap       - shallow pieces carry no signal; each coordinate group of
+               owners hides a deep piece 10 + d*(y_s - tau), d = W.  A single
+               owner reveal repels its coordinate; certification requires
+               hitting every group, so deterministic oblivious rules
+               (lowest-index ties) never certify, the oracle clears one
+               coordinate per round, and random pays a coupon collector.
   informative - deep piece continues the shallow trend and dominates the box;
                a nearest-point surrogate is exact for any evaluated scenario,
                so informed exploration costs ~W while random pays coupon-

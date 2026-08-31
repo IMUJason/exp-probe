@@ -9,13 +9,14 @@ W ≥ 10^4 and that we document the failure mode here.
 `src/spike_core.py`, method `run(...)`, the two `rule == "exp-probe"` branches:
 
 - **Sampling** (lines ~159–165): weights are stored as log-weights `logw`.
-  Before sampling we compute `wts = np.exp(logw - logw.max())`, normalize to a
-  distribution, apply exploration mixing `p = 0.95 * p + 0.05 / W`, and draw
-  `K` scenarios without replacement with probabilities `p`.
+  We form the mixed distribution `q = 0.95 * p + 0.05 / W`, cap `K*q` at 1,
+  redistribute the deficit proportionally to `q`, and round to a `K`-subset
+  by dependent rounding (Gandhi-style randomized merges), so the inclusion
+  marginals are exact.
 - **Update** (lines ~193–203): for each evaluated scenario the revealed mass
   `g_w = p_w (Q_w(y_t) − θ_{w,t})` is importance-weighted by the inclusion
   bound `p̂_w = min(1, K·p_w)` and applied multiplicatively in log space,
-  `logw[w] += η·g_w / π̃_w` with the theorem's constant rate `η = sqrt(K ln W/(T·W))`, `T` being the iteration cap; afterwards the
+  `logw[w] += η·g_w / π_w` with the exact inclusion marginal `π_w` from dependent rounding (`src/sampling.py`) and the theorem's constant rate `η = sqrt(K ln W/(T·W))`, `T` being the iteration cap; afterwards the
   vector is re-anchored with `logw -= logw.max()`.
 
 ## Why naive multiplicative weights fail at W ≥ 10^4
