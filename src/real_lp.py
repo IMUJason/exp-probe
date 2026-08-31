@@ -17,7 +17,7 @@ from __future__ import annotations
 
 import time
 import numpy as np
-from scipy.optimize import linprog
+from scipy.optimize import linprog, milp, LinearConstraint, Bounds
 from scipy.sparse import coo_matrix
 
 RNG = np.random.default_rng
@@ -86,8 +86,9 @@ class RealLPInstance:
 
 
 class RealPartialBenders:
-    def __init__(self, inst: RealLPInstance, eps=1e-3, T_chk=5):
+    def __init__(self, inst, eps=1e-3, T_chk=5, binary=False):
         self.I, self.eps, self.T_chk = inst, eps, T_chk
+        self.binary = binary                    # binary (MILP) first stage
         self.cuts = [[] for _ in range(inst.W)]               # (g, b): theta >= g'y + b
         self.n_master = 0
 
@@ -104,11 +105,17 @@ class RealPartialBenders:
                 rows.append(r); cols.append(I.n + w); vals.append(-1.0)
                 rhs.append(-b); r += 1
         A = coo_matrix((vals, (rows, cols)), shape=(max(r, 1), nv)).tocsr()
-        bounds = [(0.0, 1.0)] * I.n + [(0.0, None)] * I.W   # Q_w >= 0 valid global bound
-        if r > 0:
-            res = linprog(c_obj, A_ub=A, b_ub=np.array(rhs), bounds=bounds, method="highs")
+        lb = np.zeros(nv)
+        ub = np.concatenate([np.ones(I.n), np.full(I.W, np.inf)])   # Q_w >= 0 valid global bound
+        if self.binary:
+            cons = [LinearConstraint(A, -np.inf, np.array(rhs))] if r > 0 else []
+            res = milp(c=c_obj, constraints=cons,
+                       integrality=np.concatenate([np.ones(I.n), np.zeros(I.W)]),
+                       bounds=Bounds(lb, ub))
+        elif r > 0:
+            res = linprog(c_obj, A_ub=A, b_ub=np.array(rhs), bounds=list(zip(lb, ub)), method="highs")
         else:
-            res = linprog(c_obj, bounds=bounds, method="highs")
+            res = linprog(c_obj, bounds=list(zip(lb, ub)), method="highs")
         self.n_master += 1
         if not res.success:
             raise RuntimeError(res.message)
@@ -123,6 +130,7 @@ class RealPartialBenders:
         evals = 0
         t0 = time.perf_counter()
         logw = np.zeros(I.W)
+        eta = np.sqrt(K * np.log(I.W) / (max_iter * I.W))  # theorem rate, T = cap
         for it in range(1, max_iter + 1):
             y, theta, lb = self.master()
             if rule == "full":
@@ -162,10 +170,16 @@ class RealPartialBenders:
                 vals_free, _ = I.eval_all(y)
                 mass_free = I.p * (vals_free - theta)
                 S = np.argsort(mass_free)[::-1][:K]
+            elif rule == "est-det":
+                # stale-cut extrapolation: rank by last cut's value at y (no extra solves)
+                last = np.array([(self.cuts[w][-1][0] @ y + self.cuts[w][-1][1]) if self.cuts[w]
+                                 else -np.inf for w in range(I.W)])
+                mass_est = I.p * np.maximum(last - theta, 0.0)
+                S = np.argsort(-mass_est, kind="stable")[:K]   # deterministic ties
             elif rule == "exp-probe":
                 wts = np.exp(logw - logw.max()); p = wts / wts.sum()
-                p = 0.95 * p + 0.05 / I.W          # exploration mixing
-                S = rng.choice(I.W, size=K, replace=False, p=p)
+                q = 0.95 * p + 0.05 / I.W          # gamma-mixed sampling distribution
+                S = rng.choice(I.W, size=K, replace=False, p=q)
             else:
                 raise ValueError(rule)
             # evaluate selected scenarios and add cuts
@@ -177,9 +191,8 @@ class RealPartialBenders:
                     self.cuts[w].append(cut)
                 if rule == "exp-probe":
                     m_w = float(I.p[w] * (v - theta[w]))
-                    phat = min(1.0, K * p[w])
-                    eta = np.sqrt(np.log(I.W) / max(it, 1) / K)
-                    logw[w] += eta * max(m_w, 0.0) / max(K * phat, 1e-12)
+                    incl = min(K * q[w] / 2.0, 0.5)   # inclusion lower bound
+                    logw[w] += eta * max(m_w, 0.0) / max(incl, 1e-12)
             if rule == "exp-probe":
                 logw -= logw.max()
         return evals, max_iter, time.perf_counter() - t0

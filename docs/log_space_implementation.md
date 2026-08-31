@@ -15,7 +15,7 @@ W ≥ 10^4 and that we document the failure mode here.
 - **Update** (lines ~193–203): for each evaluated scenario the revealed mass
   `g_w = p_w (Q_w(y_t) − θ_{w,t})` is importance-weighted by the inclusion
   bound `p̂_w = min(1, K·p_w)` and applied multiplicatively in log space,
-  `logw[w] += η·g_w / (K·p̂_w)` with `η = sqrt(ln W / (t·K))`; afterwards the
+  `logw[w] += η·g_w / π̃_w` with the theorem's constant rate `η = sqrt(K ln W/(T·W))`, `T` being the iteration cap; afterwards the
   vector is re-anchored with `logw -= logw.max()`.
 
 ## Why naive multiplicative weights fail at W ≥ 10^4
@@ -51,7 +51,6 @@ rng = np.random.default_rng(0)
 W, K, T = 10_000, 50, 500
 w = np.ones(W)
 for t in range(1, T + 1):
-    eta = np.sqrt(np.log(W) / t / K)
     S = rng.choice(W, size=K, replace=False)
     w[S] *= 1 + eta * rng.random(K) * 50      # typical revealed-mass scale
 print(w.max(), w.sum())                        # inf / inf — collapsed

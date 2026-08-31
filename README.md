@@ -27,6 +27,8 @@ If you use this software or data, please cite:
 │   ├── run_bootstrap.py    # Cluster bootstrap significance for E2
 │   ├── run_timing_decomp.py# Master-vs-subproblem timing decomposition
 │   ├── run_large_scale.py  # W=10^5 attempt (incomplete; see scaling notes)
+│   ├── run_tchk_sensitivity.py # E2: certification-period sweep with est-det
+│   ├── run_cap_expansion_milp.py# E2b: genuinely binary (MILP) master probe
 │   └── make_figures.py     # Reproduce all 3 paper figures
 ├── data/                   # (empty; instances are generated on the fly by scripts)
 ├── results/                # All result files (JSON/TXT/LOG) for every table and figure
@@ -84,6 +86,8 @@ python make_figures.py
 | Fixed-share ablation (Section 5) | `run_fixed_share.py` | `results/fixed_share_{stationary,rotating}.json` |
 | Bootstrap significance (Section 6) | `run_bootstrap.py` | `results/bootstrap_significance.json` |
 | Timing decomposition (Section 6) | `run_timing_decomp.py` | `results/timing_decomp.log` |
+| T_chk sensitivity (Section 6) | `run_tchk_sensitivity.py` | `results/tchk_sensitivity.txt/json` |
+| Binary-master probe (Section 6) | `run_cap_expansion_milp.py` | `results/cap_expansion_milp.txt/json` |
 
 `make_figures.py` reads the result files directly, so the figures regenerate
 from the same numbers the tables report.

@@ -1,0 +1,32 @@
+vol=0.0 Tchk=20   full     evals=   3000 iters=  6.0 wall=   6.0s certified=True
+vol=0.0 Tchk=20   oracle   evals=   1950 iters= 20.0 wall=  24.1s certified=True
+vol=0.0 Tchk=20   random   evals=   3450 iters= 40.0 wall=   7.7s certified=True
+vol=0.0 Tchk=20   est-det  evals=   3450 iters= 40.0 wall=   7.7s certified=True
+vol=0.0 Tchk=50   full     evals=   3000 iters=  6.0 wall=   6.7s certified=True
+vol=0.0 Tchk=50   oracle   evals=   3450 iters= 50.0 wall=  62.2s certified=True
+vol=0.0 Tchk=50   random   evals=   3450 iters= 50.0 wall=   8.7s certified=True
+vol=0.0 Tchk=50   est-det  evals=   6450 iters=100.0 wall=  17.2s certified=True
+vol=0.0 Tchk=100  full     evals=   3000 iters=  6.0 wall=   5.9s certified=True
+vol=0.0 Tchk=100  oracle   evals=   5950 iters=100.0 wall= 112.0s certified=True
+vol=0.0 Tchk=100  random   evals=   5950 iters=100.0 wall=  15.3s certified=True
+vol=0.0 Tchk=100  est-det  evals=  11450 iters=200.0 wall=  28.7s certified=True
+vol=0.0 Tchk=200  full     evals=   3000 iters=  6.0 wall=   7.3s certified=True
+vol=0.0 Tchk=200  oracle   evals=  10950 iters=200.0 wall= 242.2s certified=True
+vol=0.0 Tchk=200  random   evals=  10950 iters=200.0 wall=  27.4s certified=True
+vol=0.0 Tchk=200  est-det  evals=  21450 iters=400.0 wall=  49.0s certified=True
+vol=1.0 Tchk=20   full     evals=   1000 iters=  2.0 wall=   1.7s certified=True
+vol=1.0 Tchk=20   oracle   evals=   1950 iters= 20.0 wall=  21.1s certified=True
+vol=1.0 Tchk=20   random   evals=   1950 iters= 20.0 wall=   3.7s certified=True
+vol=1.0 Tchk=20   est-det  evals=   1950 iters= 20.0 wall=   3.6s certified=True
+vol=1.0 Tchk=50   full     evals=   1000 iters=  2.0 wall=   1.8s certified=True
+vol=1.0 Tchk=50   oracle   evals=   3450 iters= 50.0 wall=  52.8s certified=True
+vol=1.0 Tchk=50   random   evals=   3450 iters= 50.0 wall=   7.3s certified=True
+vol=1.0 Tchk=50   est-det  evals=   3450 iters= 50.0 wall=   6.7s certified=True
+vol=1.0 Tchk=100  full     evals=   1000 iters=  2.0 wall=   1.8s certified=True
+vol=1.0 Tchk=100  oracle   evals=   5950 iters=100.0 wall= 103.2s certified=True
+vol=1.0 Tchk=100  random   evals=   5950 iters=100.0 wall=  12.0s certified=True
+vol=1.0 Tchk=100  est-det  evals=   5950 iters=100.0 wall=  11.6s certified=True
+vol=1.0 Tchk=200  full     evals=   1000 iters=  2.0 wall=   1.6s certified=True
+vol=1.0 Tchk=200  oracle   evals=  10950 iters=200.0 wall= 195.5s certified=True
+vol=1.0 Tchk=200  random   evals=  10950 iters=200.0 wall=  20.9s certified=True
+vol=1.0 Tchk=200  est-det  evals=  10950 iters=200.0 wall=  20.5s certified=True

@@ -28,21 +28,30 @@ def make_gains(T, W, rng, mode="stationary", n_heavy=6, n_blocks=5):
             G[b*B:(b+1)*B] = np.clip(base_b[None, :] + 0.1*rng.standard_normal((B, W)), 0, 1)
     return G
 
-def exp3m(G, K, eta, alpha=0.0):
+def exp3m(G, K, eta=None, alpha=0.0):
+    """EXP3.M with the paper's estimator: selected gains divided by the
+    inclusion lower bound min{K p / 2, 1/2}; eta=None uses the theorem's
+    constant rate eta = sqrt(K ln W / (T W)) with T the horizon."""
     T, W = G.shape
-    w = np.ones(W)
+    if eta is None:
+        eta = np.sqrt(K * np.log(W) / (T * W))
+    logw = np.zeros(W)
     gain_policy = 0.0
     rng = np.random.default_rng(1)
-    for t in range(T):
-        p = w / w.sum()
+    for t in range(1, T + 1):
+        wts = np.exp(logw - logw.max())
+        p = wts / wts.sum()
         S = rng.choice(W, size=K, replace=False, p=p)
-        phat = np.minimum(1.0, K * p)
+        incl = np.minimum(K * p / 2.0, 0.5)
         ghat = np.zeros(W)
-        ghat[S] = G[t, S] / np.maximum(phat[S], 1e-12)
-        w = w * np.exp(eta * ghat / K)
+        ghat[S] = G[t - 1, S] / np.maximum(incl[S], 1e-12)
+        logw = logw + eta * ghat
+        logw -= logw.max()
         if alpha > 0:
-            w = (1 - alpha) * w + alpha * w.sum() / W
-        gain_policy += G[t, S].mean()
+            wts2 = np.exp(logw - logw.max())
+            wts2 = (1 - alpha) * wts2 + alpha / W
+            logw = np.log(np.maximum(wts2, 1e-10))
+        gain_policy += G[t - 1, S].mean()
     return gain_policy
 
 def baselines(G, K):
@@ -61,9 +70,8 @@ def regret_scan(mode, W=50, K=5, Ts=(500, 1000, 2000, 4000), reps=10):
             rng = np.random.default_rng(1000 * r + T)
             G = make_gains(T, W, rng, mode=mode)
             bf, oracle = baselines(G, K)
-            eta = np.sqrt(np.log(W) / (T * K))
-            gp = exp3m(G, K, eta, alpha=0.0)
-            gf = exp3m(G, K, eta, alpha=0.05)
+            gp = exp3m(G, K, alpha=0.0)
+            gf = exp3m(G, K, alpha=0.05)
             reg_plain.append(bf - gp)
             reg_fs.append(bf - gf)
         out[T] = (float(np.mean(reg_plain)), float(np.std(reg_plain)),
@@ -89,7 +97,6 @@ for mode in ["stationary", "rotating"]:
 rng = np.random.default_rng(7)
 G = make_gains(2000, 50, rng, mode="rotating")
 bf, oracle = baselines(G, 5)
-eta = np.sqrt(np.log(50) / (2000 * 5))
-gp = exp3m(G, 5, eta, 0.05)
+gp = exp3m(G, 5, alpha=0.05)
 print(f"\nrotating T=2000: policy={gp:.1f} best-fixed={bf:.1f} dynamic-oracle={oracle:.1f}")
 json.dump(results, open(os.path.join(RESULTS, "t2_results.json"), "w"), indent=1)

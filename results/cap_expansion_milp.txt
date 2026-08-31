@@ -1,0 +1,8 @@
+W=200 vol=0.0 full     evals=  2000 iters= 10.0 wall=   8.5s certified=True
+W=200 vol=0.0 oracle   evals=  2350 iters= 75.0 wall=  79.3s certified=True
+W=200 vol=0.0 random   evals=  2350 iters= 75.0 wall=  60.2s certified=True
+W=200 vol=0.0 est-det  evals=  5250 iters=175.0 wall=  82.9s certified=False
+W=200 vol=1.0 full     evals=   600 iters=  3.0 wall=   0.7s certified=True
+W=200 vol=1.0 oracle   evals=  1625 iters= 50.0 wall=  18.6s certified=True
+W=200 vol=1.0 random   evals=  1625 iters= 50.0 wall=   4.7s certified=True
+W=200 vol=1.0 est-det  evals=  3075 iters=100.0 wall=   4.5s certified=True

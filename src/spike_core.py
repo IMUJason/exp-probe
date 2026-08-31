@@ -143,6 +143,7 @@ class PartialBenders:
         evals = it = 0
         stall = 0
         logw = np.zeros(self.I.W)                          # EXP-Probe log-weights
+        eta = np.sqrt(K * np.log(self.I.W) / (max_iter * self.I.W))  # theorem rate, T = cap
         for it in range(1, max_iter + 1):
             y, theta, lb = self.master()
             true_vals = self.I.values(y[None, :])[0]
@@ -160,8 +161,8 @@ class PartialBenders:
                 # semi-bandit EXP3.M, log-space, sampling w/o replacement
                 wts = np.exp(logw - logw.max())
                 p = wts / wts.sum()
-                p = 0.95 * p + 0.05 / self.I.W      # exploration mixing
-                S = rng.choice(self.I.W, size=min(K, self.I.W), replace=False, p=p)
+                q = 0.95 * p + 0.05 / self.I.W      # gamma-mixed sampling distribution
+                S = rng.choice(self.I.W, size=min(K, self.I.W), replace=False, p=q)
             elif rule in ("est-det", "est-rand", "est-nn", "surr-error"):
                 if rule == "est-nn":
                     est, has = self._surrogate_nn(y)
@@ -191,15 +192,16 @@ class PartialBenders:
                 S_eff = S                                     # allow a wasted pass
             new = self.reveal(S_eff, y)
             if rule == "exp-probe":
-                # importance-weighted semi-bandit update on revealed mass
+                # importance-weighted semi-bandit update on revealed mass;
+                # divisor is the inclusion lower bound min{K q / 2, 1/2}
                 wts = np.exp(logw - logw.max())
                 p = wts / wts.sum()
-                eta = np.sqrt(np.log(self.I.W) / max(it, 1) / K)
+                q = 0.95 * p + 0.05 / self.I.W
+                incl = np.minimum(K * q / 2.0, 0.5)
                 for w in S_eff:
                     mass_w = float(self.I.p[w] * (true_vals[w] - theta[w]))
                     gain = max(mass_w, 0.0)
-                    phat = min(1.0, K * p[w])
-                    logw[w] += eta * gain / max(K * phat, 1e-12)
+                    logw[w] += eta * gain / max(incl[w], 1e-12)
                 logw -= logw.max()
             evals += len(S_eff)
             stall = 0 if new else stall + 1

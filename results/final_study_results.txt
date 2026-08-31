@@ -1,14 +1,14 @@
-[E1] W=2000 K=20: full=2000 oracle=20 exp-probe=335 random=161 est-det=STALL | random/oracle=8.1x exp-probe/oracle=16.7x
-[E1] W=10000 K=50: full=10000 oracle=50 exp-probe=1147 random=1615 est-det=STALL | random/oracle=32.3x exp-probe/oracle=22.9x
+[E1] W=2000 K=20: full=2000 oracle=20 exp-probe=335 random=161 est-det=STALL | random/oracle=8.1x exp-probe/oracle=16.8x
+[E1] W=10000 K=50: full=10000 oracle=50 exp-probe=1146 random=1615 est-det=STALL | random/oracle=32.3x exp-probe/oracle=22.9x
 [E2] sparse_vol=0.0 (W=500, K=25):
-    random: 10725 evals (1.95x full), wall 19.8s vs full 9.5s
-    oracle: 18299 evals (3.33x full), wall 31.7s vs full 9.5s
-    exp-probe: 30500 evals (5.55x full), wall 58.7s vs full 9.5s
+    random: 2475 evals (0.82x full), wall 5.5s vs full 5.9s
+    oracle: 1975 evals (0.66x full), wall 21.8s vs full 5.9s
+    exp-probe: 2475 evals (0.82x full), wall 4.9s vs full 5.9s
 [E2] sparse_vol=0.5 (W=500, K=25):
-    random: 10725 evals (1.95x full), wall 18.8s vs full 9.1s
-    oracle: 12959 evals (2.36x full), wall 21.9s vs full 9.1s
-    exp-probe: 23992 evals (4.36x full), wall 44.1s vs full 9.1s
+    random: 2225 evals (1.11x full), wall 4.7s vs full 3.8s
+    oracle: 1725 evals (0.86x full), wall 17.9s vs full 3.8s
+    exp-probe: 2225 evals (1.11x full), wall 4.4s vs full 3.8s
 [E2] sparse_vol=1.0 (W=500, K=25):
-    random: 10725 evals (1.95x full), wall 18.1s vs full 9.0s
-    oracle: 11713 evals (2.13x full), wall 19.7s vs full 9.0s
-    exp-probe: 12225 evals (2.22x full), wall 20.8s vs full 9.0s
+    random: 1225 evals (1.23x full), wall 2.2s vs full 1.8s
+    oracle: 1225 evals (1.23x full), wall 10.4s vs full 1.8s
+    exp-probe: 1225 evals (1.23x full), wall 2.2s vs full 1.8s
