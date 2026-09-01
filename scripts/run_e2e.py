@@ -22,10 +22,11 @@ def grid(W, vol, K, T_chk, rules, reps=2, max_iter=1000):
         print(out[-1], flush=True)
     return rows
 
+RULES = ["full", "oracle", "random", "exp-probe"]
 R = {}
-R['W500_v0']  = grid(500, 0.0, 50, 100, ["full", "oracle", "random"])
-R['W500_v1']  = grid(500, 1.0, 50, 100, ["full", "oracle", "random"])
-R['W2000_v1'] = grid(2000, 1.0, 50, 100, ["full", "oracle", "random"])
+R['W500_v0']  = grid(500, 0.0, 50, 100, RULES)
+R['W500_v1']  = grid(500, 1.0, 50, 100, RULES)
+R['W2000_v1'] = grid(2000, 1.0, 50, 100, RULES)
 for k, rows in R.items():
     f = rows['full'][0]
     for rule in rows:

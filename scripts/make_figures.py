@@ -99,18 +99,20 @@ with open(os.path.join(RESULTS, "e2e_results.json")) as f:
 settings = [("W500_v0", "$W{=}500$\nvol$=0$\n(diffuse)"),
             ("W500_v1", "$W{=}500$\nvol$=1$\n(concentrated)"),
             ("W2000_v1", "$W{=}2000$\nvol$=1$")]
-rules = ["full", "oracle", "random"]
-evals = np.round(np.array([[e2[s][r][0] for s, _ in settings] for r in rules]))
-wall = np.round(np.array([[e2[s][r][3] for s, _ in settings] for r in rules]), 1)
+rules = ["full", "oracle", "random", "exp"]
+rule_keys = {"full": "full", "oracle": "oracle", "random": "random", "exp": "exp-probe"}
+evals = np.round(np.array([[e2[s][rule_keys[r]][0] for s, _ in settings] for r in rules]))
+wall = np.round(np.array([[e2[s][rule_keys[r]][3] for s, _ in settings] for r in rules]), 1)
 labels = [lab for _, lab in settings]
 
-x = np.arange(3); wdt = 0.26
+x = np.arange(3); wdt = 0.2
 fig, axes = plt.subplots(1, 2, figsize=(7.4, 3.5))
 handles = []
-for j, (r, col) in enumerate(zip(rules, [C["full"], C["oracle"], C["random"]])):
-    h = axes[0].bar(x + (j - 1) * wdt, evals[j], wdt, color=col, label=LBL[r])
+for j, (r, col) in enumerate(zip(rules, [C["full"], C["oracle"], C["random"], C["exp"]])):
+    off = (j - 1.5) * wdt
+    h = axes[0].bar(x + off, evals[j], wdt, color=col, label=LBL[r])
     handles.append(h[0])
-    axes[1].bar(x + (j - 1) * wdt, wall[j], wdt, color=col)
+    axes[1].bar(x + off, wall[j], wdt, color=col)
 for ax, ylab in zip(axes, ["scenario evaluations", "wall time (s)"]):
     ax.set_xticks(x); ax.set_xticklabels(labels, fontsize=8)
     ax.set_ylabel(ylab); ax.spines["top"].set_visible(False); ax.spines["right"].set_visible(False)
@@ -119,7 +121,7 @@ axes[0].set_title("Cost to certification", fontsize=9)
 axes[1].set_yscale("log")
 axes[1].set_title("Wall time (oracle incl.\nfree ranking solves)", fontsize=8.5)
 fig.legend(handles=handles, labels=[LBL[r] for r in rules],
-           loc="lower center", ncol=3, frameon=False, fontsize=9,
+           loc="lower center", ncol=4, frameon=False, fontsize=9,
            bbox_to_anchor=(0.5, 0.0))
 fig.tight_layout(rect=[0, 0.08, 1, 1])
 fig.savefig(os.path.join(OUT, "fig_e2_regime.pdf"))

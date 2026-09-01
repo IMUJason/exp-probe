@@ -29,6 +29,7 @@ If you use this software or data, please cite:
 │   ├── run_large_scale.py  # W=10^5 attempt (incomplete; see scaling notes)
 │   ├── run_tchk_sensitivity.py # E2: certification-period sweep with est-det
 │   ├── run_k_sensitivity.py # E2: selection-budget sweep (K in {10,25,50,100})
+│   ├── run_concentration.py # Two-axis proxies (mass concentration, dual-basis count)
 │   ├── run_cap_expansion_milp.py# E2b: genuinely binary (MILP) master probe
 │   └── make_figures.py     # Reproduce all 3 paper figures
 ├── data/                   # (empty; instances are generated on the fly by scripts)
@@ -90,6 +91,7 @@ python make_figures.py
 | T_chk sensitivity (Section 6) | `run_tchk_sensitivity.py` | `results/tchk_sensitivity.txt/json` |
 | Binary-master probe (Section 6) | `run_cap_expansion_milp.py` | `results/cap_expansion_milp.txt/json` |
 | K sensitivity (Section 6) | `run_k_sensitivity.py` | `results/k_sensitivity.txt` |
+| Two-axis proxies (Section 6) | `run_concentration.py` | `results/concentration.txt` |
 
 `make_figures.py` reads the result files directly, so the figures regenerate
 from the same numbers the tables report.

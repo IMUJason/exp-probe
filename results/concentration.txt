@@ -1,0 +1,4 @@
+E1 W=2000 K=20: topK_share=1.000 norm_entropy=0.356 (owners=15/2000)
+E1 W=10000 K=50: topK_share=1.000 norm_entropy=0.294 (owners=15/10000)
+E2 W=500 vol=0.0 (diffuse): topK_share=0.101 norm_entropy=1.000 distinct_dual_bases=500/500
+E2 W=500 vol=1.0 (concentrated): topK_share=0.121 norm_entropy=0.999 distinct_dual_bases=500/500
