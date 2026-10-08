@@ -15,22 +15,22 @@ If you use this software or data, please cite:
 │   ├── spike_core.py       # Partial-evaluation Benders on piecewise-linear instances (7 rules)
 │   └── real_lp.py          # Real-LP testbed with genuine recourse LPs (facility opening)
 ├── scripts/                # Experiment entry points (run from scripts/)
-│   ├── run_t1.py           # E1: separation on trap/informative families (W=40)
-│   ├── run_t1_sparse.py    # E1: sparse-trap scaling (W=200)
-│   ├── run_t2.py           # T2: regret scaling (stationary + rotating gains)
-│   ├── run_t2_tune.py      # T2: hyperparameter ablation
-│   ├── run_t3.py           # T3: LP solve timing + W=10^4 scaling projection
-│   ├── run_final_study.py  # E1: sparse-trap scaling (W=2000, 10000)
-│   ├── run_e2e.py          # E2: real-LP regime map (W=500, 2000; vol=0,1)
-│   ├── run_cap_expansion.py# E2b: capacity-expansion problem class
+│   ├── run_t1.py           # Separation on trap/informative families (W=40)
+│   ├── run_t1_sparse.py    # Sparse-trap family scaling (W=200)
+│   ├── run_t2.py           # Regret scaling (stationary + rotating gains)
+│   ├── run_t2_tune.py      # Regret hyperparameter ablation
+│   ├── run_t3.py           # LP solve timing + W=10^4 scaling projection
+│   ├── run_final_study.py  # Sparse-trap family scaling (W=2000, 10000)
+│   ├── run_e2e.py          # Recourse-LP regime map, facility-opening testbed (W=500, 2000; vol=0,1)
+│   ├── run_cap_expansion.py# Capacity-expansion problem class
 │   ├── run_fixed_share.py  # Fixed-share ablation (stationary/rotating)
-│   ├── run_bootstrap.py    # Cluster bootstrap significance for E2
+│   ├── run_bootstrap.py    # Cluster bootstrap significance for the recourse-LP study
 │   ├── run_timing_decomp.py# Master-vs-subproblem timing decomposition
 │   ├── run_large_scale.py  # W=10^5 attempt (incomplete; see scaling notes)
-│   ├── run_tchk_sensitivity.py # E2: certification-period sweep with est-det
-│   ├── run_k_sensitivity.py # E2: selection-budget sweep (K in {10,25,50,100})
+│   ├── run_tchk_sensitivity.py # Certification-period sweep with est-det
+│   ├── run_k_sensitivity.py # Selection-budget sweep (K in {10,25,50,100})
 │   ├── run_concentration.py # Two-axis proxies (mass concentration, dual-basis count)
-│   ├── run_cap_expansion_milp.py# E2b: genuinely binary (MILP) master probe
+│   ├── run_cap_expansion_milp.py# Genuinely binary (mixed-integer) master probe
 │   └── make_figures.py     # Reproduce all 3 paper figures
 ├── data/                   # (empty; instances are generated on the fly by scripts)
 ├── results/                # All result files (JSON/TXT/LOG) for every table and figure
@@ -54,16 +54,16 @@ From the repository root:
 ```bash
 cd scripts
 
-# E1: separation families and sparse-trap scaling
+# Sparse-trap separation and scaling
 python run_t1.py
 python run_t1_sparse.py
 python run_final_study.py            # W=2000, 10000
 
-# T2: regret scaling and hyperparameter ablation
+# Regret scaling and hyperparameter ablation
 python run_t2.py
 python run_t2_tune.py
 
-# E2: real-LP regime map and supporting studies
+# Recourse-LP regime map and supporting studies
 python run_e2e.py                    # writes results/e2e_results.*
 python run_cap_expansion.py
 python run_fixed_share.py
@@ -79,16 +79,16 @@ python make_figures.py
 
 | Paper | Source script | Source data |
 |---|---|---|
-| Table 1 (E1 separation) | `run_t1.py`, `run_t1_sparse.py`, `run_final_study.py` | `results/t1_results.json`, `results/t1_sparse_results.json`, `results/final_study_results.txt` |
-| Table 2 (E2 regime map) | `run_e2e.py` | `results/e2e_results.txt/json` |
-| Table 3 (capacity expansion) | `run_cap_expansion.py` | `results/cap_expansion.log` |
+| Table 1 (sparse-trap separation and scaling) | `run_t1.py`, `run_t1_sparse.py`, `run_final_study.py` | `results/t1_results.json`, `results/t1_sparse_results.json`, `results/final_study_results.txt` |
+| Table 2 (facility-opening regime map) | `run_e2e.py` | `results/e2e_results.txt/json` |
+| Table 3 (certification-period sensitivity) | `run_tchk_sensitivity.py` | `results/tchk_sensitivity.txt/json` |
 | Fig. 1 (regret scaling, Section 5) | `make_figures.py` | `results/t2_results.json` |
-| Fig. 2 (E1 scaling) | `make_figures.py` | `results/t1_sparse_results.json`, `results/final_study_results.txt` |
-| Fig. 3 (E2 regime) | `make_figures.py` | `results/e2e_results.json` |
+| Fig. 2 (sparse-trap scaling) | `make_figures.py` | `results/t1_sparse_results.json`, `results/final_study_results.txt` |
+| Fig. 3 (facility-opening regime) | `make_figures.py` | `results/e2e_results.json` |
 | Fixed-share ablation (Section 5) | `run_fixed_share.py` | `results/fixed_share_{stationary,rotating}.json` |
 | Bootstrap significance (Section 6) | `run_bootstrap.py` | `results/bootstrap_significance.json` |
 | Timing decomposition (Section 6) | `run_timing_decomp.py` | `results/timing_decomp.log` |
-| T_chk sensitivity (Section 6) | `run_tchk_sensitivity.py` | `results/tchk_sensitivity.txt/json` |
+| Table 4 (capacity expansion) | `run_cap_expansion.py` | `results/cap_expansion.log` |
 | Binary-master probe (Section 6) | `run_cap_expansion_milp.py` | `results/cap_expansion_milp.txt/json` |
 | K sensitivity (Section 6) | `run_k_sensitivity.py` | `results/k_sensitivity.txt` |
 | Two-axis proxies (Section 6) | `run_concentration.py` | `results/concentration.txt` |
