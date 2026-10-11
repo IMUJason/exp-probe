@@ -6,6 +6,12 @@
 # stale-cut tie-breaking resolves differently: in the archived run one of the two seeds
 # fails to certify within the 200-iteration cap (5,975 evaluations) while in this re-run
 # both seeds certify at iteration 150 (4,525 evaluations each).
+# The cell is deterministic within this environment: a repeat run of est-det vol=0
+# returns 4,525 / iteration 150 / certified for both seeds again, bit for bit.
+# The documented SciPy 1.15.3 environment cannot be reconstituted on this machine:
+# its compiled extensions fail to load (dlopen fails on many .so files),
+# so the archived numbers are the record of the 1.15.3 stack and this file is the
+# record of the 1.16.3 stack, with the one differing cell stated above.
 #
   seed0: evals=  2200 iters=  11 wall=  10.3s certified=True
   seed1: evals=  1800 iters=   9 wall=   6.6s certified=True
