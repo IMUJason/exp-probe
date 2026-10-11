@@ -128,6 +128,10 @@ class RealPartialBenders:
         I = self.I
         evals = 0
         t0 = time.perf_counter()
+        # set to True only when the run returns through a certification test;
+        # it == max_iter alone cannot distinguish certifying at the last check
+        # from exhausting the iteration cap
+        self.certified = False
         logw = np.zeros(I.W)
         eta = np.sqrt(K * np.log(I.W) / (max_iter * I.W))  # theorem rate, T = cap
         for it in range(1, max_iter + 1):
@@ -142,6 +146,7 @@ class RealPartialBenders:
                 ub = float(y @ I.f + vals @ I.p)
                 lb2 = self.master()[2]
                 if ub - lb2 <= self.eps * max(1.0, abs(ub)):
+                    self.certified = True
                     return evals, it, time.perf_counter() - t0
                 continue
             check = (it % self.T_chk == 0) or (it == 1)
@@ -155,6 +160,7 @@ class RealPartialBenders:
                 ub = float(y @ I.f + vals @ I.p)
                 lb2 = self.master()[2]
                 if ub - lb2 <= self.eps * max(1.0, abs(ub)):
+                    self.certified = True
                     return evals, it, time.perf_counter() - t0
             # selection
             if rule == "full":

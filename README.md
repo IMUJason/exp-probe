@@ -81,7 +81,8 @@ python make_figures.py
 
 | Paper | Source script | Source data |
 |---|---|---|
-| Table 1 (sparse-trap separation and scaling) | `run_t1.py`, `run_t1_sparse.py`, `run_final_study.py` | `results/t1_results.json`, `results/t1_sparse_results.json`, `results/final_study_results.txt` |
+| Table 1 (sparse-trap separation and scaling) | `run_t1_sparse.py`, `run_final_study.py` | `results/t1_sparse_results.json`, `results/final_study_results.txt` |
+| Exploratory small-scale runs (not cited in the paper) | `run_t1.py` | `results/t1_results.json` |
 | Table 2 (facility-opening regime map) | `run_e2e.py` | `results/e2e_results.txt/json` |
 | Table 3 (certification-period sensitivity) | `run_tchk_sensitivity.py` | `results/tchk_sensitivity.txt/json` |
 | Fig. 1 (regret scaling, Section 5) | `make_figures.py` | `results/t2_results.json` |
@@ -93,7 +94,7 @@ python make_figures.py
 | Table 4 (capacity expansion) | `run_cap_expansion.py` | `results/cap_expansion.log` (paper wall times: archived summary at commit 308be4c; the current log is a later re-run with identical evals/iters) |
 | Certified-regime validation (Section 5) | `run_t2_matched.py` | `results/t2_matched.json` (per-run and pooled bounds) |
 | Regret-rate sweep (Section 5) | `run_t2_tune.py` | `results/t2_tune.txt` |
-| Binary-master probe (Section 6) | `run_cap_expansion_milp.py` | `results/cap_expansion_milp.txt/json` (per-seed lines and two-seed means) |
+| Binary-master probe (Section 6) | `run_cap_expansion_milp.py` | `results/cap_expansion_milp.txt/json` (per-seed lines and two-seed means; the archived `certified` flag for the diffuse est-det cell is a boundary artifact of the old `it < max_iter` test -- the evaluation count 5,975 shows that seed certified at the iteration-200 check; the script now reads `sim.certified`) |
 | Binary-master probe, newer solver stack | `run_cap_expansion_milp.py` | `results/cap_expansion_milp_scipy1163.log` (SciPy 1.16.3 re-run: identical except the diffuse est-det cell, where both seeds certify instead of one failing) |
 | K sensitivity (Section 6) | `run_k_sensitivity.py` | `results/k_sensitivity.txt` |
 | Subproblem dimensions and solve time (Section 6) | `run_subprob_timing.py` | `results/e2_subsolve_timing.txt` (510 columns / 46 rows exact; per-solve time is machine-dependent: about 1.7 ms on the study machine, about 2 ms under a newer stack) |

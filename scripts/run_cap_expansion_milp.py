@@ -27,7 +27,10 @@ for vol in [0.0, 1.0]:
             inst = CapacityExpansionInstance(n=12, m=20, W=200, sparse_vol=vol, seed=100 + r)
             sim = RealPartialBenders(inst, eps=1e-2, T_chk=50, binary=True)
             e, it, dt = sim.run(rule, K=25, max_iter=200, rng=np.random.default_rng(r))
-            evs.append(e); its.append(it); dts.append(dt); certs.append(it < 200)
+            # sim.certified is set by the solver on the certification path; the
+            # old test `it < max_iter` mislabelled a run that certified at the
+            # last check (it == max_iter) as uncertified
+            evs.append(e); its.append(it); dts.append(dt); certs.append(sim.certified)
             # per-seed line: the paper quotes the two seeds individually for est-det
             out.append(f"  seed{r}: evals={e:>6.0f} iters={it:>4} wall={dt:>6.1f}s "
                        f"certified={certs[-1]}")
