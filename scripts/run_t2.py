@@ -91,6 +91,8 @@ def main():
     for mode in ["stationary", "rotating"]:
         res = regret_scan(mode)
         results[mode] = res
+        # archive the fitted log-log slope quoted in the manuscript
+        results.setdefault("slopes", {})[mode] = loglog_slope(res)
         print(f"\n=== {mode} (W=50, K=5) — regret vs best-fixed-K ===")
         print(f"{'T':<7} {'EXP3.M(mean±sd)':<20} {'fixed-share(mean±sd)':<22}")
         for T, (pm, ps, fm, fs) in res.items():

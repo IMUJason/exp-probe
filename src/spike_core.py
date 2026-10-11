@@ -163,7 +163,8 @@ class PartialBenders:
                 S = rng.choice(self.I.W, size=min(K, self.I.W), replace=False)
             elif rule == "oracle":
                 mass = self.I.p * (true_vals - theta)
-                S = np.argsort(mass)[::-1][:K]
+                # top-K with ties broken by smallest index (the documented rule)
+                S = np.argsort(-mass, kind="stable")[:K]
             elif rule == "exp-probe":
                 # semi-bandit EXP3.M: DepRound sampling with exact marginals
                 wts = np.exp(logw - logw.max())

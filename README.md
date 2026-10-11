@@ -91,6 +91,7 @@ python make_figures.py
 | Fixed-share ablation (Section 5) | `run_fixed_share.py` | `results/fixed_share_{stationary,rotating}.json` |
 | Bootstrap significance (Section 6) | `run_bootstrap.py` | `results/bootstrap_significance.json` |
 | Timing decomposition (Section 6) | `run_timing_decomp.py` | `results/timing_decomp.log` |
+| Per-solve timing of the 32x48 recourse LP (Section 6) | `run_t3.py` | `results/t3_results.txt` |
 | Table 4 (capacity expansion) | `run_cap_expansion.py` | `results/cap_expansion.log` (paper wall times: archived summary at commit 308be4c; the current log is a later re-run with identical evals/iters) |
 | Certified-regime validation (Section 5) | `run_t2_matched.py` | `results/t2_matched.json` (per-run and pooled bounds) |
 | Regret-rate sweep (Section 5) | `run_t2_tune.py` | `results/t2_tune.txt` |
@@ -102,6 +103,27 @@ python make_figures.py
 
 `make_figures.py` reads the result files directly, so the figures regenerate
 from the same numbers the tables report.
+
+## Reproducibility notes
+
+- **Oracle tie-break.** `Definition 5` of the paper specifies ties broken by smallest
+  index; both simulators now implement that rule (`np.argsort(-mass, kind="stable")[:K]`).
+  The two-piece tables are invariant under the tie rule (owners carry positive mass), and
+  the W=200 cell reproduces bit-for-bit (`results/t1_sparse_results.json` unchanged).
+- **Initial pools on the recourse-LP testbed.** Each scenario's pool starts with the single
+  valid cut `(0, 0)`, i.e. the bound `Q_w >= 0` of Definition 2's nonempty initial pool. The
+  spot-check against the archived facility-opening counts (all four rules, vol=0 and vol=1)
+  reproduces every evaluation and iteration count exactly.
+- **T2 regret scan and fixed-share ablation.** `results/t2_results.json` and
+  `results/fixed_share_{stationary,rotating}.json` were regenerated with the exact-marginal
+  sampler of `src/sampling.py`. The previously archived values came from a pre-refactor
+  estimator (sampling with `rng.choice(..., p=...)` and dividing by the inclusion lower bound
+  `min(Kp/2, 1/2)`), which the shipped script no longer reproduces; the manuscript's fitted
+  slopes (0.52 stationary, 0.68 rotating) and ablation numbers were updated to the
+  regenerated values. The qualitative statements are unchanged (sublinear stationary growth,
+  steeper under rotation, `alpha=0` wins stationary, fixed-share tracks rotation).
+- **Archive vs. re-run.** `results/cap_expansion.log` and the wall-clock columns of the paper
+  come from the archived summary at commit `308be4c`; the timings are load-dependent.
 
 ## License
 

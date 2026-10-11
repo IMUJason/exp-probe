@@ -91,7 +91,9 @@ class RealPartialBenders:
     def __init__(self, inst, eps=1e-3, T_chk=5, binary=False):
         self.I, self.eps, self.T_chk = inst, eps, T_chk
         self.binary = binary                    # binary (MILP) first stage
-        self.cuts = [[] for _ in range(inst.W)]               # (g, b): theta >= g'y + b
+        # initial pools: the single valid global cut (0, 0), i.e. the bound Q_w >= 0;
+        # this is the nonempty initial pool C_{w,0} of Definition 2
+        self.cuts = [[(np.zeros(inst.n), 0.0)] for _ in range(inst.W)]               # (g, b): theta >= g'y + b
         self.n_master = 0
 
     def master(self):
@@ -171,7 +173,8 @@ class RealPartialBenders:
                 # pricing device: ranking uses true masses at zero cost (only K evals charged)
                 vals_free, _ = I.eval_all(y)
                 mass_free = I.p * (vals_free - theta)
-                S = np.argsort(mass_free)[::-1][:K]
+                # top-K with ties broken by smallest index (the documented rule)
+                S = np.argsort(-mass_free, kind="stable")[:K]
             elif rule == "est-det":
                 # stale-cut extrapolation: rank by last cut's value at y (no extra solves)
                 last = np.array([(self.cuts[w][-1][0] @ y + self.cuts[w][-1][1]) if self.cuts[w]
