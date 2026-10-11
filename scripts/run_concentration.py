@@ -43,7 +43,7 @@ for W, K in [(2000, 20), (10000, 50)]:
                f"(owners={sum(len(x) for x in groups)}/{W})")
     print(out[-1], flush=True)
 
-# ---- E2 real-LP: mass at y_1 + active-dual-basis count over a full run ----
+# ---- E2 real-LP: mass at y_1 + distinct-subgradient count at y_1 ----
 for W, vol, tag in [(500, 0.0, "diffuse"), (500, 1.0, "concentrated")]:
     inst = RealLPInstance(n=16, m=30, W=W, sparse_vol=vol, seed=100)
     sim = RealPartialBenders(inst, eps=1e-3, T_chk=100)
@@ -54,7 +54,7 @@ for W, vol, tag in [(500, 0.0, "diffuse"), (500, 1.0, "concentrated")]:
     # distinct rounded evaluation subgradients across scenarios at y_1
     bases = {tuple(np.round(grads[w], 6)) for w in range(W)}
     out.append(f"E2 W={W} vol={vol} ({tag}): topK_share={share:.3f} "
-               f"norm_entropy={ent:.3f} distinct_dual_bases={len(bases)}/{W}")
+               f"norm_entropy={ent:.3f} distinct_subgradients={len(bases)}/{W}")
     print(out[-1], flush=True)
 
 with open(os.path.join(RESULTS, "concentration.txt"), "w") as f:

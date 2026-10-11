@@ -14,9 +14,8 @@ W ≥ 10^4 and that we document the failure mode here.
   by dependent rounding (Gandhi-style randomized merges), so the inclusion
   marginals are exact.
 - **Update** (lines ~193–203): for each evaluated scenario the revealed mass
-  `g_w = p_w (Q_w(y_t) − θ_{w,t})` is importance-weighted by the inclusion
-  bound `p̂_w = min(1, K·p_w)` and applied multiplicatively in log space,
-  `logw[w] += η·g_w / π_w` with the exact inclusion marginal `π_w` from dependent rounding (`src/sampling.py`) and the theorem's constant rate `η = sqrt(K ln W/(T·W))`, `T` being the iteration cap; afterwards the
+  `g_w = p_w (Q_w(y_t) − θ_{w,t})` is divided by
+  the exact inclusion marginal `π_w` from dependent rounding (`src/sampling.py`), `logw[w] += η·g_w / π_w`, and applied multiplicatively in log space with the theorem's constant rate `η = sqrt(K ln W/(T·W))`, `T` being the iteration cap; afterwards the
   vector is re-anchored with `logw -= logw.max()`.
 
 ## Why naive multiplicative weights fail at W ≥ 10^4
@@ -34,8 +33,8 @@ modes appear on our instance scales:
    collapses onto the currently-best scenarios, the γ-mixing term is the only
    source of exploration; with linear weights the collapse happens
    catastrophically (all mass flushed to a single index) instead of gradually,
-   and the observed evaluation counts diverge from the
-   $O(G\sqrt{TKW\ln W})$ regret behavior of Theorem 3.
+   and the measured regret departs from the $\sqrt{TKW\ln W}$ scale of the
+   bound in Theorem 3.
 
 Both are eliminated by (i) storing `logw` and exponentiating only after
 subtracting the current maximum (`exp(logw - logw.max())` is numerically safe:

@@ -1,0 +1,12 @@
+analyzed horizon-constant rate eta* = sqrt(K lnW/(TW)) = 0.01399 (T=2000, W=50, K=5)
+stationary: regret vs best-fixed for eta grid
+  eta=0.005  regret= 2201.05 +-  85.28
+  eta=0.01   regret= 1172.01 +-  84.03
+  eta=0.02   regret=  672.96 +- 143.05
+  eta=0.05   regret=  282.60 +-  67.49
+  eta=0.1    regret= 1585.41 +- 1323.49
+rotating: regret vs best-fixed for alpha grid (eta=0.02)
+  alpha=0.0   regret=  605.58 +- 352.97
+  alpha=0.01  regret= -483.65 +- 257.59
+  alpha=0.02  regret= -351.99 +- 227.05
+  alpha=0.05  regret=   63.68 +- 290.73

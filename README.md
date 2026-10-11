@@ -91,8 +91,10 @@ python make_figures.py
 | Bootstrap significance (Section 6) | `run_bootstrap.py` | `results/bootstrap_significance.json` |
 | Timing decomposition (Section 6) | `run_timing_decomp.py` | `results/timing_decomp.log` |
 | Table 4 (capacity expansion) | `run_cap_expansion.py` | `results/cap_expansion.log` (paper wall times: archived summary at commit 308be4c; the current log is a later re-run with identical evals/iters) |
-| Certified-regime validation (Section 5) | `run_t2_matched.py` | `results/t2_matched.json` |
-| Binary-master probe (Section 6) | `run_cap_expansion_milp.py` | `results/cap_expansion_milp.txt/json` |
+| Certified-regime validation (Section 5) | `run_t2_matched.py` | `results/t2_matched.json` (per-run and pooled bounds) |
+| Regret-rate sweep (Section 5) | `run_t2_tune.py` | `results/t2_tune.txt` |
+| Binary-master probe (Section 6) | `run_cap_expansion_milp.py` | `results/cap_expansion_milp.txt/json` (per-seed lines and two-seed means) |
+| Binary-master probe, newer solver stack | `run_cap_expansion_milp.py` | `results/cap_expansion_milp_scipy1163.log` (SciPy 1.16.3 re-run: identical except the diffuse est-det cell, where both seeds certify instead of one failing) |
 | K sensitivity (Section 6) | `run_k_sensitivity.py` | `results/k_sensitivity.txt` |
 | Two-axis proxies (Section 6) | `run_concentration.py` | `results/concentration.txt` |
 

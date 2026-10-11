@@ -1,0 +1,33 @@
+# Binary-master probe re-run under a newer solver stack (SciPy 1.16.3 / HiGHS as shipped),
+# Python 3.13.9, executed 2026-10-11 on the author's Apple-Silicon machine.
+# The archived results/cap_expansion_milp.{json,txt} were produced with SciPy 1.15.3
+# (Python 3.10), the environment documented in the paper. Every entry agrees across the
+# two versions except the diffuse (vol=0) est-det cell, where the near-degenerate
+# stale-cut tie-breaking resolves differently: in the archived run one of the two seeds
+# fails to certify within the 200-iteration cap (5,975 evaluations) while in this re-run
+# both seeds certify at iteration 150 (4,525 evaluations each).
+#
+  seed0: evals=  2200 iters=  11 wall=  10.3s certified=True
+  seed1: evals=  1800 iters=   9 wall=   6.6s certified=True
+W=200 vol=0.0 full     evals=  2000 iters= 10.0 wall=   8.4s certified=True
+  seed0: evals=  1625 iters=  50 wall=  34.9s certified=True
+  seed1: evals=  3075 iters= 100 wall= 123.1s certified=True
+W=200 vol=0.0 oracle   evals=  2350 iters= 75.0 wall=  79.0s certified=True
+  seed0: evals=  1625 iters=  50 wall=  24.4s certified=True
+  seed1: evals=  3075 iters= 100 wall=  93.8s certified=True
+W=200 vol=0.0 random   evals=  2350 iters= 75.0 wall=  59.1s certified=True
+  seed0: evals=  4525 iters= 150 wall=  58.1s certified=True
+  seed1: evals=  4525 iters= 150 wall=  58.1s certified=True
+W=200 vol=0.0 est-det  evals=  4525 iters=150.0 wall=  58.1s certified=True
+  seed0: evals=   600 iters=   3 wall=   0.7s certified=True
+  seed1: evals=   600 iters=   3 wall=   0.7s certified=True
+W=200 vol=1.0 full     evals=   600 iters=  3.0 wall=   0.7s certified=True
+  seed0: evals=  1625 iters=  50 wall=  18.7s certified=True
+  seed1: evals=  1625 iters=  50 wall=  18.3s certified=True
+W=200 vol=1.0 oracle   evals=  1625 iters= 50.0 wall=  18.5s certified=True
+  seed0: evals=  1625 iters=  50 wall=   4.4s certified=True
+  seed1: evals=  1625 iters=  50 wall=   5.3s certified=True
+W=200 vol=1.0 random   evals=  1625 iters= 50.0 wall=   4.8s certified=True
+  seed0: evals=  3075 iters= 100 wall=   4.2s certified=True
+  seed1: evals=  3075 iters= 100 wall=   4.7s certified=True
+W=200 vol=1.0 est-det  evals=  3075 iters=100.0 wall=   4.4s certified=True

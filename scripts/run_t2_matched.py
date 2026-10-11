@@ -11,9 +11,11 @@ using the matching exploration schedule
 which satisfies the balance with equality, and running the gamma-mixed
 semi-bandit rule (dependent rounding with exact inclusion marginals) on the
 stationary and block-rotating gain processes of run_t2.py. It reports the
-measured regret against the best fixed K-set, the bound of Theorem 3,
-and the two proof diagnostics: the per-round exponent x_t = eta g_t / pi_t
-(must stay <= 1 under the balance) and the capping deficit D_t.
+measured regret against the best fixed K-set, the bound of Theorem 3---both
+with the pooled mean capping deficit (the number quoted in the paper) and run
+by run with each run's own deficit---and the two proof diagnostics: the
+per-round exponent x_t = eta g_t / pi_t (must stay <= 1 under the balance)
+and the capping deficit D_t.
 """
 import os
 import sys
@@ -94,8 +96,11 @@ def main():
             xs.append(x_max)
             ds.append(d_sum / T)
         mean_d = float(np.mean(ds))
-        bound = ((K / (1 - gamma)) * (np.log(W) / eta + E_CONST * eta * T * (2 * W / K + 1))
-                 + K * gamma * T + mean_d * T)
+        main_term = ((K / (1 - gamma)) * (np.log(W) / eta + E_CONST * eta * T * (2 * W / K + 1))
+                     + K * gamma * T)
+        bound = main_term + mean_d * T
+        bounds_per_run = [main_term + d * T for d in ds]
+        excess = [r - b for r, b in zip(regs, bounds_per_run)]
         out[f"W{W}_K{K}_T{T}"] = {
             "W": W, "K": K, "T": T,
             "gamma": gamma, "eta": eta,
@@ -106,9 +111,15 @@ def main():
             "sd_regret": float(np.std(regs)),
             "min_regret": float(np.min(regs)),
             "max_regret": float(np.max(regs)),
+            "regrets": [float(r) for r in regs],
+            "bound_main_term_excl_deficit": float(main_term),
             "bound": bound,
             "bound_holds_on_mean": bool(np.mean(regs) <= bound),
-            "bound_holds_on_every_rep": bool(np.max(regs) <= bound),
+            "bound_holds_on_every_rep_pooled_deficit": bool(np.max(regs) <= bound),
+            "bound_per_run_min": float(np.min(bounds_per_run)),
+            "bound_per_run_max": float(np.max(bounds_per_run)),
+            "max_excess_regret_minus_own_bound": float(np.max(excess)),
+            "bound_holds_on_every_rep_own_deficit": bool(np.max(excess) <= 0.0),
             "bound_over_mean_regret": float(bound / np.mean(regs)),
             "max_exponent_seen": float(np.max(xs)),
             "exponent_le_one_on_all_runs": bool(np.max(xs) <= 1.0 + 1e-9),
@@ -118,7 +129,8 @@ def main():
         print(f"W={W} K={K} T={T}: gamma={gamma:.4f} eta={eta:.5f} "
               f"regret={np.mean(regs):.1f}+-{np.std(regs):.1f} bound={bound:.0f} "
               f"ratio={bound/np.mean(regs):.1f}x max_x={np.max(xs):.4f} "
-              f"D/round={mean_d:.5f}", flush=True)
+              f"D/round={mean_d:.5f} per-run-bound=[{min(bounds_per_run):.0f},{max(bounds_per_run):.0f}] "
+              f"max_excess={np.max(excess):.1f}", flush=True)
     with open(os.path.join(RESULTS, "t2_matched.json"), "w") as fh:
         json.dump(out, fh, indent=1)
     print("wrote results/t2_matched.json")
