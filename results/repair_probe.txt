@@ -1,0 +1,4 @@
+random-state draws: 25700 across (W,K) in {(50,5),(200,4),(2000,20),(10000,50)}
+repair activations: 0
+exp-probe W=200 5-seed run reproduces the archived table row (full 200 / oracle 8); repairs counted over all rules included
+python 3.13.9, numpy 2.3.5

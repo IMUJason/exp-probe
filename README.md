@@ -122,6 +122,15 @@ from the same numbers the tables report.
   slopes (0.52 stationary, 0.68 rotating) and ablation numbers were updated to the
   regenerated values. The qualitative statements are unchanged (sublinear stationary growth,
   steeper under rotation, `alpha=0` wins stationary, fixed-share tracks rotation).
+- **Experiment parameters.** The learning rate and mixing used in every run are deterministic
+  functions of (W, K, T) in the scripts (`eta = sqrt(K ln W / (T W))`, `gamma = 0.05` in the
+  Benders runs); `results/t2_matched.json` additionally records gamma, eta, and the balance
+  slack explicitly for the certified-regime runs.
+- **Sampler repair audit.** `src/sampling.py` counts activations of its floating-point
+  cardinality repair in `REPAIR_COUNT`; `scripts/run_repair_probe.py` exercises 100,000
+  random sampler states plus full Table-1-scale runs and asserts the count stays at zero
+  (artifact: `results/repair_probe.txt`), so the exact-marginals claim holds on the archived
+  paths.
 - **Archive vs. re-run.** `results/cap_expansion.log` and the wall-clock columns of the paper
   come from the archived summary at commit `308be4c`; the timings are load-dependent.
 

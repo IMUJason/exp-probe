@@ -9,6 +9,12 @@ exactly E[S_w] = P_w. The estimator g/P_w is then unbiased.
 import numpy as np
 
 
+# times the floating-point cardinality repair below has fired; instrumented
+# 2026-10-11 so the "exact marginals" claim is auditable -- the probe in
+# scripts/run_repair_probe.py asserts it stays at zero on the archived paths
+REPAIR_COUNT = 0
+
+
 def marginals_and_round(q, K, rng):
     """Return (P, S): P is the exact marginal vector, S a sample with
     E[S] = P, |S| = K, where P >= min(K q, 1) coordinatewise."""
@@ -53,7 +59,9 @@ def marginals_and_round(q, K, rng):
             else:
                 S[i], S[j] = 0.0, si + sj
     S = np.rint(S).astype(int)
+    global REPAIR_COUNT
     if S.sum() != K:  # numerical safety: fix cardinality by swapping
+        REPAIR_COUNT += 1
         ones, zeros = np.where(S == 1)[0], np.where(S == 0)[0]
         rng.shuffle(ones); rng.shuffle(zeros)
         while S.sum() > K and ones.size:
