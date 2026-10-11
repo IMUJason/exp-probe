@@ -97,7 +97,7 @@ plt.close(fig)
 with open(os.path.join(RESULTS, "e2e_results.json")) as f:
     e2 = json.load(f)
 settings = [("W500_v0", "$W{=}500$\nvol$=0$\n(diffuse)"),
-            ("W500_v1", "$W{=}500$\nvol$=1$\n(concentrated)"),
+            ("W500_v1", "$W{=}500$\nvol$=1$\n(5\\% volatile)"),
             ("W2000_v1", "$W{=}2000$\nvol$=1$")]
 rules = ["full", "oracle", "random", "exp"]
 rule_keys = {"full": "full", "oracle": "oracle", "random": "random", "exp": "exp-probe"}
