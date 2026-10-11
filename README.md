@@ -92,7 +92,7 @@ python make_figures.py
 | Bootstrap significance (Section 6) | `run_bootstrap.py` | `results/bootstrap_significance.json` |
 | Timing decomposition (Section 6) | `run_timing_decomp.py` | `results/timing_decomp.log` |
 | Per-solve timing of the 32x48 recourse LP (Section 6) | `run_t3.py` | `results/t3_results.txt` |
-| Table 4 (capacity expansion) | `run_cap_expansion.py` | `results/cap_expansion.log` (paper wall times: archived summary at commit 308be4c, preserved verbatim as `results/archive/cap_expansion_308be4c.log`; the current log is a later re-run with identical evals/iters; the script prints per-seed lines so the one-decimal iteration means are checkable) |
+| Table 4 (capacity expansion) | `run_cap_expansion.py` | `results/cap_expansion.log` (paper wall times: archived summary at commit 308be4c, preserved verbatim as `results/archive/cap_expansion_308be4c.log`; the current log is a later re-run with identical evals/iters; the script prints per-seed lines, so the one-decimal iteration means are checkable from any future run directly) |
 | Certified-regime validation (Section 5) | `run_t2_matched.py` | `results/t2_matched.json` (per-run and pooled bounds) |
 | Regret-rate sweep (Section 5) | `run_t2_tune.py` | `results/t2_tune.txt` |
 | Binary-master probe (Section 6) | `run_cap_expansion_milp.py` | `results/cap_expansion_milp.txt/json` (per-seed lines and two-seed means; the archived `certified` flag for the diffuse est-det cell is a boundary artifact of the old `it < max_iter` test -- the evaluation count 5,975 shows that seed certified at the iteration-200 check; the script now reads `sim.certified`) |
@@ -127,10 +127,10 @@ from the same numbers the tables report.
   Benders runs); `results/t2_matched.json` additionally records gamma, eta, and the balance
   slack explicitly for the certified-regime runs.
 - **Sampler repair audit.** `src/sampling.py` counts activations of its floating-point
-  cardinality repair in `REPAIR_COUNT`; `scripts/run_repair_probe.py` exercises 100,000
-  random sampler states plus full Table-1-scale runs and asserts the count stays at zero
-  (artifact: `results/repair_probe.txt`), so the exact-marginals claim holds on the archived
-  paths.
+  cardinality repair in `REPAIR_COUNT`; `scripts/run_repair_probe.py` exercises 25,700
+  random sampler states (draws scale as 1e6/W per shape) plus a full-rules run at the W=200
+  Table 1 scale and asserts the count stays at zero (artifact:
+  `results/repair_probe.txt`), so the exact-marginals claim holds on the audited paths.
 - **Archive vs. re-run.** `results/cap_expansion.log` and the wall-clock columns of the paper
   come from the archived summary at commit `308be4c`; the timings are load-dependent.
 

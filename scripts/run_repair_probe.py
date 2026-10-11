@@ -3,10 +3,11 @@
 The paper states that the inclusion marginals are exact and that a final
 repair only enforces the cardinality K in floating point; the estimator is
 unbiased exactly when the repair never triggers. This probe counts repair
-activations over (a) 10^5 random marginal-distribution states of the shapes
-used in the study (W in {50, 200, 2000, 10000}, K in {5, 10, 20, 50}) and
-(b) full EXP-Probe runs on the sparse-trap family at the Table 1 scales of
-W=200 (5 seeds) and W=2000 (2 seeds). Expected result: zero activations.
+activations over (a) random marginal-distribution states of the shapes used
+in the study (W in {50, 200, 2000, 10000}, K in {5, 10, 20, 50}; draws scale
+as 1e6/W per shape, 25,700 states in total, because dependent rounding costs
+O(W) per draw) and (b) a full EXP-Probe run on the sparse-trap family at the
+Table 1 scale W=200 (all rules, 5 seeds). Expected result: zero activations.
 """
 import os
 import sys

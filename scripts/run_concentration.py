@@ -39,8 +39,14 @@ for W, K in [(2000, 20), (10000, 50)]:
     y, theta, lb = sim.master()
     g = inst.p * (inst.values(y[None, :])[0] - theta)
     share, ent = concentration(g, K)
+    # distinct first-iterate subgradients (active piece per scenario, rounded);
+    # on this family the per-scenario slope noise makes ~all of them distinct,
+    # which is why the count does not separate the regimes here
+    deep = inst.active_is_deep(y[None, :])[0]
+    grads = np.where(deep[:, None], inst.dp_a, inst.sh_a)
+    d = len({tuple(np.round(gg, 6)) for gg in grads})
     out.append(f"E1 W={W} K={K}: topK_share={share:.3f} norm_entropy={ent:.3f} "
-               f"(owners={sum(len(x) for x in groups)}/{W})")
+               f"distinct_subgradients={d}/{W} (owners={sum(len(x) for x in groups)}/{W})")
     print(out[-1], flush=True)
 
 # ---- E2 real-LP: mass at y_1 + distinct-subgradient count at y_1 ----
