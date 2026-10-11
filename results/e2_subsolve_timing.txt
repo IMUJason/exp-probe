@@ -1,0 +1,5 @@
+instance: facility opening, n=16, m=30, W=500, seed=100 (Table 2 testbed)
+subproblem LP: 510 columns (480 transport + 30 shortage), 46 rows (30 demand equalities + 16 capacity inequalities)
+timing on this machine: 500 solves at y=0.5*1, mean 2.12 ms, p95 2.33 ms, total 1.06 s
+study-machine reference: the archived full-evaluation runs of Table 2 imply 1.4-1.7 ms per solve (5.3 s / 3,000 solves at W=500 vol=0; 1.5 s / 1,000 at W=500 vol=1; 6.3 s / 4,000 at W=2000 vol=1, master at about 4% of the total)
+python 3.13.9, numpy 2.3.5, scipy 1.16.3

@@ -96,6 +96,7 @@ python make_figures.py
 | Binary-master probe (Section 6) | `run_cap_expansion_milp.py` | `results/cap_expansion_milp.txt/json` (per-seed lines and two-seed means) |
 | Binary-master probe, newer solver stack | `run_cap_expansion_milp.py` | `results/cap_expansion_milp_scipy1163.log` (SciPy 1.16.3 re-run: identical except the diffuse est-det cell, where both seeds certify instead of one failing) |
 | K sensitivity (Section 6) | `run_k_sensitivity.py` | `results/k_sensitivity.txt` |
+| Subproblem dimensions and solve time (Section 6) | `run_subprob_timing.py` | `results/e2_subsolve_timing.txt` (510 columns / 46 rows exact; per-solve time is machine-dependent: about 1.7 ms on the study machine, about 2 ms under a newer stack) |
 | Two-axis proxies (Section 6) | `run_concentration.py` | `results/concentration.txt` |
 
 `make_figures.py` reads the result files directly, so the figures regenerate
