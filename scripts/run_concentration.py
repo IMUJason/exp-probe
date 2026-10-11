@@ -4,9 +4,10 @@ Mass concentration: at the first master iterate y_1, the revealed masses
 g_w = p_w (Q_w(y_1) - theta_{w,1}) are computed for every scenario; we report
 the top-K mass share (fraction of total positive mass held by the K largest)
 and the normalized entropy of the positive-mass distribution (1 = uniform,
-0 = a single scenario). Piece complexity: for the real-LP instances we report
-the number of distinct active dual bases seen across the certified run, a
-proxy for how many cuts breadth must supply.
+0 = a single scenario). Cut diversity: for the real-LP instances we report the
+number of distinct rounded evaluation subgradients across scenarios at the
+first master iterate (a first-iterate summary of how different the local
+linearizations are; not a per-scenario piece count).
 """
 import os, sys, json
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -50,7 +51,7 @@ for W, vol, tag in [(500, 0.0, "diffuse"), (500, 1.0, "concentrated")]:
     vals, grads = inst.eval_all(y)
     g = inst.p * (vals - theta)
     share, ent = concentration(g, 50)
-    # distinct active dual bases (rounded subgradients) at y_1
+    # distinct rounded evaluation subgradients across scenarios at y_1
     bases = {tuple(np.round(grads[w], 6)) for w in range(W)}
     out.append(f"E2 W={W} vol={vol} ({tag}): topK_share={share:.3f} "
                f"norm_entropy={ent:.3f} distinct_dual_bases={len(bases)}/{W}")

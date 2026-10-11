@@ -1,12 +1,12 @@
-# EXP-Probe: Regret-Optimal Scenario Selection in Partial-Evaluation Benders Decomposition
+# EXP-Probe: Regret Guarantees for Scenario Selection in Partial-Evaluation Benders Decomposition
 
 This repository is the official reproducibility package for the paper
-**"The Price of Selectivity: Regret-Optimal Scenario Selection in Partial-Evaluation Benders Decomposition"** by Jin Xin Cao.
+**"The Price of Selectivity: Regret Guarantees for Scenario Selection in Partial-Evaluation Benders Decomposition"** by Jin Xin Cao.
 
 ## Citation
 
 If you use this software or data, please cite:
-> Cao, Jin Xin (2026). "The Price of Selectivity: Regret-Optimal Scenario Selection in Partial-Evaluation Benders Decomposition." Manuscript under review.
+> Cao, Jin Xin (2026). "The Price of Selectivity: Regret Guarantees for Scenario Selection in Partial-Evaluation Benders Decomposition." Manuscript under review.
 
 ## Repository Structure
 
@@ -19,17 +19,18 @@ If you use this software or data, please cite:
 │   ├── run_t1_sparse.py    # Sparse-trap family scaling (W=200)
 │   ├── run_t2.py           # Regret scaling (stationary + rotating gains)
 │   ├── run_t2_tune.py      # Regret hyperparameter ablation
+│   ├── run_t2_matched.py   # Certified-regime validation (matched gamma schedule, balance eta<=K gamma/W)
 │   ├── run_t3.py           # LP solve timing + W=10^4 scaling projection
 │   ├── run_final_study.py  # Sparse-trap family scaling (W=2000, 10000)
 │   ├── run_e2e.py          # Recourse-LP regime map, facility-opening testbed (W=500, 2000; vol=0,1)
 │   ├── run_cap_expansion.py# Capacity-expansion problem class
 │   ├── run_fixed_share.py  # Fixed-share ablation (stationary/rotating)
-│   ├── run_bootstrap.py    # Cluster bootstrap significance for the recourse-LP study
+│   ├── run_bootstrap.py    # Bootstrap over repeated runs of one fixed sparse-trap (W=2000) instance
 │   ├── run_timing_decomp.py# Master-vs-subproblem timing decomposition
 │   ├── run_large_scale.py  # W=10^5 attempt (incomplete; see scaling notes)
 │   ├── run_tchk_sensitivity.py # Certification-period sweep with est-det
 │   ├── run_k_sensitivity.py # Selection-budget sweep (K in {10,25,50,100})
-│   ├── run_concentration.py # Two-axis proxies (mass concentration, dual-basis count)
+│   ├── run_concentration.py # Two-axis proxies (top-K mass share, first-iterate subgradient diversity)
 │   ├── run_cap_expansion_milp.py# Genuinely binary (mixed-integer) master probe
 │   └── make_figures.py     # Reproduce all 3 paper figures
 ├── data/                   # (empty; instances are generated on the fly by scripts)
@@ -60,6 +61,7 @@ python run_t1_sparse.py
 python run_final_study.py            # W=2000, 10000
 
 # Regret scaling and hyperparameter ablation
+python run_t2_matched.py   # certified-regime validation (matched gamma schedule)
 python run_t2.py
 python run_t2_tune.py
 
@@ -88,7 +90,8 @@ python make_figures.py
 | Fixed-share ablation (Section 5) | `run_fixed_share.py` | `results/fixed_share_{stationary,rotating}.json` |
 | Bootstrap significance (Section 6) | `run_bootstrap.py` | `results/bootstrap_significance.json` |
 | Timing decomposition (Section 6) | `run_timing_decomp.py` | `results/timing_decomp.log` |
-| Table 4 (capacity expansion) | `run_cap_expansion.py` | `results/cap_expansion.log` |
+| Table 4 (capacity expansion) | `run_cap_expansion.py` | `results/cap_expansion.log` (paper wall times: archived summary at commit 308be4c; the current log is a later re-run with identical evals/iters) |
+| Certified-regime validation (Section 5) | `run_t2_matched.py` | `results/t2_matched.json` |
 | Binary-master probe (Section 6) | `run_cap_expansion_milp.py` | `results/cap_expansion_milp.txt/json` |
 | K sensitivity (Section 6) | `run_k_sensitivity.py` | `results/k_sensitivity.txt` |
 | Two-axis proxies (Section 6) | `run_concentration.py` | `results/concentration.txt` |

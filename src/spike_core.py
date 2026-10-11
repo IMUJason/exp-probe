@@ -55,7 +55,7 @@ def make_trap_family(n=3, W=40, depth=None, per_group=5, tau=0.85, rng=None):
     group s has deep piece 10 + d*(y_s - tau), dominated by the shallow
     piece on y_s <= tau and active on the upper face y_s > tau. With
     d = W (the default) a single owner reveal repels the master from
-    y_s = 1 (uplift (1/W)*d*(1-tau) > |c_s|), the uncleared coordinates
+    y_s = 1 (per-unit uplift p_w*d > |c_s|, the repulsion condition), the uncleared coordinates
     stay at 1 with constant gap, and certification requires hitting every
     group -- one coordinate at a time."""
     rng = RNG(7) if rng is None else rng
