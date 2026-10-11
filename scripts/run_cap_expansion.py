@@ -32,9 +32,11 @@ def run():
                     inst = CapacityExpansionInstance(n=16, m=30, W=W, sparse_vol=vol, seed=100 + r)
                     sim = RealPartialBenders(inst, eps=1e-3, T_chk=100)
                     e, it, dt = sim.run(rule, K=50, max_iter=1000, rng=np.random.default_rng(r))
-                    evs.append(e); its.append(it); dts.append(dt); certs.append(it < 1000)
+                    evs.append(e); its.append(it); dts.append(dt); certs.append(sim.certified)
+                    # per-seed line: the paper's one-decimal iteration means
+                    # (10.5, 4.5) are only checkable with these visible
+                    print(f"W={W} vol={vol} {rule}: seed{r}: {e:.0f} evals, {it} iters, {dt:.1f}s, certified={certs[-1]}", flush=True)
                 out.append((W, vol, rule, float(np.mean(evs)), float(np.mean(its)), float(np.mean(dts)), all(certs)))
-                print(f"W={W} vol={vol} {rule}: {evs[-1]:.0f} evals, {its[-1]} iters, {dts[-1]:.1f}s, certified={certs[-1]}", flush=True)
     print("\n=== Capacity expansion summary ===")
     lines = []
     for W, vol, rule, ev, it, dt, cert in out:

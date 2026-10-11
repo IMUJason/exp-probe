@@ -92,7 +92,7 @@ python make_figures.py
 | Bootstrap significance (Section 6) | `run_bootstrap.py` | `results/bootstrap_significance.json` |
 | Timing decomposition (Section 6) | `run_timing_decomp.py` | `results/timing_decomp.log` |
 | Per-solve timing of the 32x48 recourse LP (Section 6) | `run_t3.py` | `results/t3_results.txt` |
-| Table 4 (capacity expansion) | `run_cap_expansion.py` | `results/cap_expansion.log` (paper wall times: archived summary at commit 308be4c; the current log is a later re-run with identical evals/iters) |
+| Table 4 (capacity expansion) | `run_cap_expansion.py` | `results/cap_expansion.log` (paper wall times: archived summary at commit 308be4c, preserved verbatim as `results/archive/cap_expansion_308be4c.log`; the current log is a later re-run with identical evals/iters; the script prints per-seed lines so the one-decimal iteration means are checkable) |
 | Certified-regime validation (Section 5) | `run_t2_matched.py` | `results/t2_matched.json` (per-run and pooled bounds) |
 | Regret-rate sweep (Section 5) | `run_t2_tune.py` | `results/t2_tune.txt` |
 | Binary-master probe (Section 6) | `run_cap_expansion_milp.py` | `results/cap_expansion_milp.txt/json` (per-seed lines and two-seed means; the archived `certified` flag for the diffuse est-det cell is a boundary artifact of the old `it < max_iter` test -- the evaluation count 5,975 shows that seed certified at the iteration-200 check; the script now reads `sim.certified`) |
